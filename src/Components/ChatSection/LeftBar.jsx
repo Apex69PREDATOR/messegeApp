@@ -1,123 +1,149 @@
-import {React,useEffect, useContext,useState} from 'react'
+import { React, useEffect, useContext, useState } from 'react'
 import { UserContext } from '../../Context/UserProvider'
 import { TextField } from '@mui/material'
 import { setCurrentPerson } from '../Utils/UsefullFunctions'
+import SearchAmongFriends from './SearchAmongFriends'
 
-const LeftBar = ({socket}) => {
-  const months = ['Jan','Feb','Mar',"Apr",'May',"Jun","Jul","Aug","Sep",'Oct',"Nov",'Dec']
-  const [lastMessages,setLastMessages] = useState(new Map())
-  const {userDetails,friends,onlineArr,setCurrentTalk,setCurrentName,recentChats,setRecentChats,recentSearchedForOnline,randomImage} = useContext(UserContext)
-    
-    const findRecentChats=()=>{
-      if(!socket)
-        return
-       if(socket?.readyState === WebSocket.OPEN)
-      socket.send(JSON.stringify({type:'recentChats'}))
-    else {
-    const interval = setInterval(() => {
-        
-      if (socket?.readyState === WebSocket.OPEN) {
+const LeftBar = ({ socket }) => {
+  const months = ['Jan', 'Feb', 'Mar', "Apr", 'May', "Jun", "Jul", "Aug", "Sep", 'Oct', "Nov", 'Dec']
+  const { userDetails, friends, onlineArr, setCurrentTalk, setCurrentName, recentChats, setRecentChats, recentSearchedForOnline, randomImage, lastMessages, setLastMessages } = useContext(UserContext)
+  const [searchedFriend,setSearchedFriend] = useState('')
 
-        socket.send(JSON.stringify({type:'recentChats'}));
-        clearInterval(interval);
-      }
-    }, 100);
-     setTimeout(() => clearInterval(interval), 5000)
-  }
+  const findRecentChats = () => {
+    if (!socket) return
+    if (socket?.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({ type: 'recentChats' }))
+    } else {
+      const interval = setInterval(() => {
+        if (socket?.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({ type: 'recentChats' }))
+          clearInterval(interval)
+        }
+      }, 100)
+      setTimeout(() => clearInterval(interval), 5000)
     }
-    
- const getRecentChats = ()=>{
-  if(!socket)
-    return
-      const handleMessage = (event) => {
-    try {
-      const data = JSON.parse(event.data); // `event` here is a MessageEvent
-      if (data.type === 'recentChats') {
-        setRecentChats(data?.otherMembers);
-        setLastMessages(prev=>{
-           data?.otherMembers?.forEach((members,i)=>(prev.set(members?.id,data?.recentMessages[i])))
-           return prev
-        })
-    
-      }
-    } catch (err) {
-      console.error('WebSocket parse error:', err);
-    }
-  };
-  socket.addEventListener('message', handleMessage);
   }
 
-  
-
-    useEffect(()=>{
-      findRecentChats()
-      getRecentChats()
-    },[socket])
-
-    function calculateDate(date){
-       const checkDate = new Date(date)
-       const presentDate  = new Date()
-       if(checkDate.getFullYear() === presentDate.getFullYear()){
-            if(checkDate.getMonth() === presentDate.getMonth()){
-                if(checkDate.getDate() === presentDate.getDate()){
-                        return (checkDate.getHours() + ' : ' + checkDate.getMinutes())
-                }
-                return (checkDate.getDate() + ' '  + months[checkDate.getMonth()])
-            }
-            return months[checkDate.getMonth()]
-       }
-       return checkDate.getFullYear()
+  const getRecentChats = () => {
+    if (!socket) return
+    const handleMessage = (event) => {
+      try {
+        const data = JSON.parse(event.data)
+        if (data.type === 'recentChats') {
+          setRecentChats(data?.otherMembers)
+          setLastMessages(prev => {
+            data?.otherMembers?.forEach((members, i) => prev.set(members?.id, data?.recentMessages[i]))
+            return prev
+          })
+        }
+      } catch (err) {
+        console.error('WebSocket parse error:', err)
+      }
     }
+    socket.addEventListener('message', handleMessage)
+  }
 
-  return ( 
-    <section className='flex flex-col w-[20%] gap-8 p-3'>
-    <div className="profile flex items-center gap-4"><div className="relative w-15 h-15">
-        <img
-          src={userDetails?.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
-          alt="Profile"
-          className="w-full h-full object-cover rounded-full border"
+  useEffect(() => {
+    findRecentChats()
+    getRecentChats()
+  }, [socket])
+
+  function calculateDate(date) {
+    const checkDate = new Date(date)
+    const presentDate = new Date()
+    if (checkDate.getFullYear() === presentDate.getFullYear()) {
+      if (checkDate.getMonth() === presentDate.getMonth()) {
+        if (checkDate.getDate() === presentDate.getDate()) {
+          return `${checkDate.getHours()}:${checkDate.getMinutes().toString().padStart(2, '0')}`
+        }
+        return `${checkDate.getDate()} ${months[checkDate.getMonth()]}`
+      }
+      return months[checkDate.getMonth()]
+    }
+    return checkDate.getFullYear()
+  }
+
+  return (
+    <section className="flex flex-col w-[22%] bg-white border-r border-gray-200 h-screen overflow-hidden">
+      
+      {/* Profile Section */}
+      <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <div className="relative w-14 h-14">
+          <img
+            src={userDetails?.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
+            alt="Profile"
+            className="w-full h-full object-cover rounded-full border border-gray-300"
+          />
+        </div>
+        <p className="font-medium text-gray-800 text-lg">
+          {userDetails?.fname} {userDetails?.lname}
+        </p>
+      </div>
+
+      {/* Search */}
+      <div className="px-4 py-3 border-b border-gray-200">
+        <TextField
+          variant="outlined"
+          placeholder="Search friends..."
+          size="small"
+          fullWidth
+          className="bg-gray-100 rounded-md"
+          onKeyDownCapture={async(e)=>{
+            await new Promise((resolve)=>setTimeout(resolve,200))
+            setSearchedFriend(e.target.value)}}
         />
       </div>
-      <p>{userDetails?.fname + " " + userDetails?.lname}</p>
-      </div>
-     <TextField variant='standard' name='Find friends'/>
-    <div className="chats flex flex-col w-[100%]">
-      {
-        recentChats?.map(val=>{
-         return friends?.map((val2)=>{
-             if(val.id==val2._id){
+
+      {/* Chats List */}
+      <div className="flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+        {!searchedFriend ?
+        recentChats?.map(val =>
+          friends?.map((val2) => {
+            if (val.id == val2._id) {
               const lastMessage = lastMessages?.get(val2._id)
-              return <div onClick={()=>{
-                setCurrentPerson(val2._id,setCurrentTalk,setCurrentName,val2?.fname)
-              }} key={val2._id} style={{cursor:'pointer'}} className='flex items-center p-2 gap-4 w-[100%]'>
-               <div className="relative w-12 h-12 min-h-12 min-w-12">
-        <img
-          src={val2.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
-          alt="Profile"
-          className="w-full h-full object-cover rounded-full border"
-        />
-        <span
-          className={`absolute bottom-1 right-0 w-3 h-3 rounded-full border-2 border-white ${
-            recentSearchedForOnline.current.has(val2._id)?  onlineArr.includes(val2._id) ? 'bg-green-500' : 'bg-red-500':null
-          }`}
-        ></span>
-      </div>
-               <p> {val2.fname + ' ' + val2.lname} 
-                <br />
-                <p className='text-[#757575] w-[15vw] flex between'>
-                  <span className='w-[75%]'>{
-                  (lastMessage?.senderId===userDetails?._id?'You : ':`${val2?.fname} : `) + lastMessage?.text.substring(0,25)}</span>
-                  <span className='w-[25%]'>{calculateDate(lastMessage?.sendAt)}</span>
-                </p>
-               </p>
-              </div>
-          
-        }})
+              return (
+                <div
+                  key={val2._id}
+                  onClick={() => {
+                    setCurrentPerson(val2._id, setCurrentTalk, setCurrentName, val2?.fname)
+                  }}
+                  className="flex items-center px-4 py-3 gap-4 hover:bg-gray-100 cursor-pointer transition-colors duration-200 border-b border-gray-100"
+                >
+                  {/* Profile Image */}
+                  <div className="relative w-12 h-12 min-w-12 min-h-12">
+                    <img
+                      src={val2.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
+                      alt="Profile"
+                      className="w-full h-full object-cover rounded-full border border-gray-300"
+                    />
+                    <span
+                      className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white ${
+                        recentSearchedForOnline.current.has(val2._id)
+                          ? onlineArr.includes(val2._id)
+                            ? 'bg-green-500'
+                            : 'bg-red-500'
+                          : 'hidden'
+                      }`}
+                    ></span>
+                  </div>
 
-})
+                  {/* Chat Info */}
+                  <div className="flex flex-col flex-1">
+                    <div className="flex justify-between items-center">
+                      <p className="font-medium text-gray-900">{val2.fname} {val2.lname}</p>
+                      <span className="text-xs text-gray-500">{calculateDate(lastMessage?.sendAt)}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 truncate">
+                      {(lastMessage?.senderId === userDetails?._id ? 'You: ' : `${val2?.fname}: `) + lastMessage?.text.substring(0,20)}
+                    </p>
+                  </div>
+                </div>
+              )
+            }
+          })
+        ):<SearchAmongFriends str={searchedFriend} calculateDate={calculateDate}/>
       }
-
-    </div>
+      </div>
     </section>
   )
 }

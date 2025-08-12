@@ -3,7 +3,7 @@ import { UserContext } from '../../Context/UserProvider';
 
 
 const ChatBody = (props) => {
-  const {currentTalk} = useContext(UserContext)
+  const {currentTalk,randomImage} = useContext(UserContext)
   const [seenArr,setSeenArr] = useState([])
   const markSeen=()=>{
     
@@ -56,10 +56,10 @@ const ChatBody = (props) => {
     const cancel=markSeen()
     return cancel
   },[props.socket])
-
+  const randomPic = randomImage[Math.floor(Math.random() * randomImage.length)]
   const length = props?.allMessage?.length
   return (
-    <section id='chatSection' className="w-[70%] h-[50vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar">
+    <section id='chatSection' className="w-[70%] h-[50vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar z-2">
       {props?.allMessage?.map((msgObj,i) => {
         const isSelf = msgObj?.senderId === props.userDetails._id;
         const isSeenBySelf = msgObj?.seenBy?.includes(props.userDetails._id)
@@ -72,14 +72,18 @@ const ChatBody = (props) => {
             className={`flex ${isSelf ? 'justify-end' : 'justify-start'} ${length-1 === i?'lastMsg': null} ${isSelf ? null:isSeenBySelf?null:'msgReceived'}`}
           >
             <p
-              className={`max-w-md overflow-y-hidden px-4 py-2 rounded-lg text-sm shadow-md ${
+              className={`max-w-md  px-4 py-3 relative`}
+            >
+             <span className={`max-w-md overflow-y-hidden px-2 py-2 rounded-lg text-sm shadow-md ${
                 isSelf
                   ? 'bg-blue-500 text-white rounded-tr-none'
                   : 'bg-gray-200 text-black rounded-tl-none'
-              }`}
-            >
-              {msgObj?.text}
-              <sup>{isSelf?seenArr.includes(msgObj._id) || isSeenByOther?'seen':null:null}</sup>
+              }`}> {msgObj?.text}  </span>
+              {isSelf?seenArr.includes(msgObj._id) || isSeenByOther?<span className='absolute bottom-[0%] right-[3%]'><img
+          src={currentTalk?.profilePic || randomPic}
+          alt="Profile"
+          className="w-5 h-5 object-cover rounded-full border"
+        /></span>:null:null}
             </p>
           </div>
         );
