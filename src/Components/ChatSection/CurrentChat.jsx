@@ -49,6 +49,7 @@ const CurrentChat = (props) => {
 
      throughWS(data)
      document.getElementById("message").value=''
+     setFileArr([])
   }
   useEffect(() => {
     if (!props.socket) return;

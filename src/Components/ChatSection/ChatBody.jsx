@@ -5,6 +5,22 @@ import { UserContext } from '../../Context/UserProvider';
 const ChatBody = (props) => {
   const {currentTalk,randomImage} = useContext(UserContext)
   const [seenArr,setSeenArr] = useState([])
+   const commonImageFormats = [
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "webp",
+  "avif",
+  "svg",
+  "ico",
+  "bmp"
+];
+const commonDocumentFormats = [
+  "pdf",
+  "txt",
+];
+
   const markSeen=()=>{
     
     if(!props.socket)
@@ -71,6 +87,41 @@ const ChatBody = (props) => {
             id={msgObj._id}
             className={`flex ${isSelf ? 'justify-end' : 'justify-start'} ${length-1 === i?'lastMsg': null} ${isSelf ? null:isSeenBySelf?null:'msgReceived'}`}
           >
+          {
+            msgObj.isFile ?
+            msgObj.path.map(file=>{
+              
+              const fileUrl = `http://localhost:5000/uploads/${file}`
+              const extension = file.split('.')[1]
+            
+            
+                
+                return <div className={`max-w-md  relative overflow-y-hidden px-3 py-4 rounded-lg text-sm shadow-md ${
+                isSelf
+                  ? 'bg-blue-500 text-white rounded-tr-none'
+                  : 'bg-gray-200 text-black rounded-tl-none'
+              }`}   style={{cursor:'pointer'}} >
+                {commonImageFormats.includes(extension)&&<img src={fileUrl} className='w-[100%]' alt="not found" />}
+
+                {commonDocumentFormats.includes(extension) && <iframe 
+  src={`${fileUrl}`} 
+  width="100%" 
+  height="400px"
+  >
+</iframe>
+
+}
+                
+
+                <p className={`text-${isSelf?'right':'left'} my-1`}>{msgObj?.text}</p>
+                {isSelf?seenArr.includes(msgObj._id) || isSeenByOther?<span className='absolute bottom-[0%] right-[0%]'><img
+          src={currentTalk?.profilePic || randomPic}
+          alt="Profile"
+          className="w-5 h-5 object-cover rounded-full border"
+        /></span>:null:null}
+              </div>
+              
+            }):
             <p
               className={`max-w-md  px-4 py-3 relative`}
             >
@@ -85,6 +136,7 @@ const ChatBody = (props) => {
           className="w-5 h-5 object-cover rounded-full border"
         /></span>:null:null}
             </p>
+          }
           </div>
         );
       })}
