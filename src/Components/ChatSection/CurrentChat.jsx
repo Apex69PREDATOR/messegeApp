@@ -1,6 +1,6 @@
 import {useState,useEffect,useContext,useRef} from 'react'
 import { Button} from '@mui/material'
-import { Send , AttachFile} from '@mui/icons-material'
+import { Send , AttachFile,Cancel} from '@mui/icons-material'
 import {useForm} from 'react-hook-form'
 import WelcomeMessage from './WelcomeMessage'
 import ChatHeader from './ChatHeader'
@@ -115,6 +115,42 @@ const CurrentChat = (props) => {
      {currentTalk?<ChatHeader name={currentName} currentTalk={currentTalk} onlineArr={onlineArr}/>:<WelcomeMessage userDetails={props?.userDetails}/>}
      <ChatBody allMessage={allMessage} userDetails={props?.userDetails} socket={props.socket}/>
      <div className='w-[60%] flex z-2 p-2 bg-white rounded'>
+      {fileArr.length > 0 && (
+  <div className="files flex absolute gap-3 overflow-x-auto bottom-[12%] p-2 max-w-[80%] rounded-lg bg-white/70 backdrop-blur-sm shadow-md">
+    {fileArr.map((file, index) => {
+      // Detect file type for icon
+      const fileType = file.type.split("/")[0];
+      let icon = "📄";
+      if (fileType === "image") icon = "🖼️";
+      else if (file.type.includes("mp4")) icon = "▶️";
+      else if (file.type.includes("pdf")) icon = "📕";
+      else if (file.type.includes("zip") || file.type.includes("rar")) icon = "🗜️";
+
+      return (
+        <div
+          key={index}
+          className="relative flex items-center gap-2 p-3 bg-white rounded-lg shadow-sm border border-gray-200 min-w-[160px] hover:shadow-lg transition-shadow"
+        >
+          <span className="text-2xl">{icon}</span>
+          <div className="flex flex-col text-sm max-w-[100px] overflow-hidden">
+            <span className="truncate font-medium">{file.name}</span>
+            <span className="text-gray-500 text-xs">
+              {(file.size / 1024).toFixed(1)} KB
+            </span>
+          </div>
+          <Cancel
+            color="error"
+            className="absolute top-1 right-1 cursor-pointer hover:scale-110 transition-transform"
+            onClick={() =>
+              setFileArr((prev) => prev.filter((_, i) => i !== index))
+            }
+          />
+        </div>
+      );
+    })}
+  </div>
+)}
+
      <input className='bg-white p-[10px] w-[70%] rounded'  {...register('message',{required:true})} id="message" placeholder='write a message 🗨️'/>
      <Button  endIcon={<AttachFile/>} type='button'  color='primary'  style={{padding:'10px 10px'}} onClick={()=>{fileElement.current.click()}}  />
      <Button  startIcon={<Send/>} type='submit'  color='primary'  style={{padding:'15px 30px'}}  variant='outlined' disabled={wait} >{wait?'Generating...':"Send"}</Button>

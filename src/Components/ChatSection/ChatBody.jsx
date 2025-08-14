@@ -1,5 +1,6 @@
 import {useEffect,useState,useContext} from 'react';
 import { UserContext } from '../../Context/UserProvider';
+import { Button } from '@mui/material';
 
 
 const ChatBody = (props) => {
@@ -93,22 +94,19 @@ const commonDocumentFormats = [
               
               const fileUrl = `http://localhost:5000/uploads/${file}`
               const extension = file.split('.')[1]
-            
-            
+              const splitedName = file.split('-')
+              const lastName = splitedName[splitedName.length-1] 
                 
                 return <div className={`max-w-md  relative overflow-y-hidden px-3 py-4 rounded-lg text-sm shadow-md ${
                 isSelf
                   ? 'bg-blue-500 text-white rounded-tr-none'
                   : 'bg-gray-200 text-black rounded-tl-none'
               }`}   style={{cursor:'pointer'}} >
-                {commonImageFormats.includes(extension)&&<img src={fileUrl} className='w-[100%]' alt="not found" />}
-
-                {commonDocumentFormats.includes(extension) && <iframe 
-  src={`${fileUrl}`} 
+                {commonImageFormats.includes(extension)?<img src={fileUrl} className='w-[100%]' alt="not found" />:commonDocumentFormats.includes(extension)? <iframe 
+  src={`${fileUrl}`}  
   width="100%" 
   height="400px"
-  >
-</iframe>
+  ></iframe>:<div><p className={`text-[${isSelf?'#dedee0':'#503dfc'}] mb-4`}>{lastName.length>25?lastName.substring(0,25)+'...':lastName}</p><a href={fileUrl}  download={lastName}><Button variant='contained' color='secondary' style={{fontSize:'0.8em'}}>Download to see</Button></a></div>
 
 }
                 
