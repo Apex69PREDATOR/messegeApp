@@ -11,7 +11,7 @@ const Suggestion = (props) => {
     },body:JSON.stringify({receiverId,senderId:userDetails?._id})})
   }
   return (
-    <div id='suggestion' className='absolute top-[100%] gap-[20px] bg-white w-[27vw] p-[20px] flex flex-col shadow-md z-2'>
+    <div id='suggestion' className='absolute top-[100%] gap-[20px] bg-white w-[27vw] p-[20px] flex flex-col shadow-md z-3'>
       {props.users.map(val=>(
         <p key={val._id} id={val._id} className='p-[15px] relative shadow-md hover:shadow-lg bg-[#f7f7f7]'>{val.fname + ' ' + val.lname} <PersonAdd onClick={(e)=>{
           addFriend(val._id)

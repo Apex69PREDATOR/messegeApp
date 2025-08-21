@@ -14,3 +14,9 @@ body{
    background-color: rgba(186, 186, 186,.3);
    border-radius: 4px;
 }
+.editButton{
+  transition: 0.2s ease-in-out !important;
+}
+.editButton:hover{
+  transform: scale(1.2,1.2);
+}

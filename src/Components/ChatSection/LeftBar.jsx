@@ -1,10 +1,13 @@
-import { React, useEffect, useContext, useState } from 'react'
+import {  useEffect, useContext, useState } from 'react'
 import { UserContext } from '../../Context/UserProvider'
+import { useNavigate } from 'react-router-dom'
 import { TextField } from '@mui/material'
+import { Edit } from '@mui/icons-material'
 import { setCurrentPerson } from '../Utils/UsefullFunctions'
 import SearchAmongFriends from './SearchAmongFriends'
 
 const LeftBar = ({ socket }) => {
+  const navigation = useNavigate()
   const months = ['Jan', 'Feb', 'Mar', "Apr", 'May', "Jun", "Jul", "Aug", "Sep", 'Oct', "Nov", 'Dec']
   const { userDetails, friends, onlineArr, setCurrentTalk, setCurrentName, recentChats, setRecentChats, recentSearchedForOnline, randomImage, lastMessages, setLastMessages } = useContext(UserContext)
   const [searchedFriend,setSearchedFriend] = useState('')
@@ -64,7 +67,7 @@ const LeftBar = ({ socket }) => {
   }
 
   return (
-    <section className="flex flex-col w-[22%] bg-white border-r border-gray-200 h-screen overflow-hidden">
+    <section className="flex flex-col w-[25%] bg-white border-r border-gray-200 h-screen overflow-hidden">
       
       {/* Profile Section */}
       <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50">
@@ -74,6 +77,13 @@ const LeftBar = ({ socket }) => {
             alt="Profile"
             className="w-full h-full object-cover rounded-full border border-gray-300"
           />
+          <Edit className='absolute bottom-[-5%] shadow-md right-[-5%] bg-white rounded-full p-1 cursor-pointer editButton'   color='info' style={{fontSize:'1.6em'}} onClick={()=>{
+            localStorage.setItem('efname',userDetails?.fname)
+            localStorage.setItem('elname',userDetails?.lname)
+            localStorage.setItem('eabout',userDetails?.about)
+            localStorage.setItem('email',userDetails?.email)
+            localStorage.setItem('ephone',userDetails?.phone)
+            navigation('/editAccount')}}/>
         </div>
         <p className="font-medium text-gray-800 text-lg">
           {userDetails?.fname} {userDetails?.lname}

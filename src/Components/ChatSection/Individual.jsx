@@ -63,7 +63,7 @@ const Individual = () => {
   return (
     <section className='w-[100%] flex  evenly'>
       <LeftBar socket={socket.current}/>
-    <div className='w-[70%] flex  items-center flex-col gap-[2vh]'>
+    <div className='w-[72%] flex  items-center flex-col gap-[2vh]'>
     {seeFriends && <ShowFriends socket={socket.current} setSeeFriends={setSeeFriends}/>}
     <div className='flex items-center gap-[5vw] w-[80%] p-[1vw]' ><Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
   All Friends

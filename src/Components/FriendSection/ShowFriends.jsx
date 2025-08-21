@@ -1,6 +1,6 @@
 import { useState,useContext } from 'react';
 import { Button,Badge } from '@mui/material';
-import { Person, RequestQuote,Cancel } from '@mui/icons-material';
+import { Person,Cancel } from '@mui/icons-material';
 import Friends from './Friends';
 import Requests from './Requests';
 import { UserContext } from '../../Context/UserProvider';

@@ -109,12 +109,12 @@ const CurrentChat = (props) => {
   } 
     
   return (
-    <form className={`w-[65vw]  relative gap-10 items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
-      <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[82vh] z-0 rounded-md'/>
-      <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[82vh] rounded-md"></div>
+    <form className={`w-[70vw]  relative gap-10 items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
+      <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[87vh] z-0 rounded-md'/>
+      <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[87vh] rounded-md"></div>
      {currentTalk?<ChatHeader name={currentName} currentTalk={currentTalk} onlineArr={onlineArr}/>:<WelcomeMessage userDetails={props?.userDetails}/>}
      <ChatBody allMessage={allMessage} userDetails={props?.userDetails} socket={props.socket}/>
-     <div className='w-[60%] flex z-2 p-2 bg-white rounded'>
+     <div className='w-[60%] flex z-2 p-2 mb-2 bg-white rounded'>
       {fileArr.length > 0 && (
   <div className="files flex absolute gap-3 overflow-x-auto bottom-[12%] p-2 max-w-[80%] rounded-lg bg-white/70 backdrop-blur-sm shadow-md">
     {fileArr.map((file, index) => {
@@ -151,9 +151,9 @@ const CurrentChat = (props) => {
   </div>
 )}
 
-     <input className='bg-white p-[10px] w-[70%] rounded'  {...register('message',{required:true})} id="message" placeholder='write a message 🗨️'/>
+     <input className='bg-white p-2 w-[70%] rounded'  {...register('message',{required:true})} id="message" placeholder={fileArr.length<=0?'write a message 🗨️ or attach a file 📂':'Enter a description for the files'}/>
      <Button  endIcon={<AttachFile/>} type='button'  color='primary'  style={{padding:'10px 10px'}} onClick={()=>{fileElement.current.click()}}  />
-     <Button  startIcon={<Send/>} type='submit'  color='primary'  style={{padding:'15px 30px'}}  variant='outlined' disabled={wait} >{wait?'Generating...':"Send"}</Button>
+     <Button  startIcon={<Send/>} type='submit'  color='primary'  style={{padding:'10px 30px'}}  variant='outlined' disabled={wait} >{wait?'Generating...':"Send"}</Button>
      </div>
      <input type="file" multiple style={{display:"none"}} onChange={handleFileChange} ref={fileElement}/>
     </form>

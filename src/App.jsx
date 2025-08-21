@@ -1,7 +1,7 @@
-import React from 'react'
 import Auth from './Components/Auth'
 import Individual from './Components/ChatSection/Individual'
 import {createBrowserRouter,RouterProvider} from 'react-router-dom'
+import EditAcount from './Components/Accounts/EditAcount'
 const App = () => {
   const Route=createBrowserRouter([
     {
@@ -11,6 +11,10 @@ const App = () => {
     {
       path: '/',
       element: <Individual/>
+    },
+    {
+      path: '/editAccount',
+      element: <EditAcount/>
     }
   ])
   return (
