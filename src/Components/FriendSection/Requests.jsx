@@ -1,21 +1,22 @@
-import  { useContext,useEffect } from 'react';
+import  { useContext } from 'react';
 import { UserContext } from '../../Context/UserProvider';
 import { Button } from '@mui/material';
 import { Person3TwoTone,Delete } from '@mui/icons-material';
-import { acceptRequests } from '../Utils/UsefullFunctions';
+import { acceptRequests,deleteRequests } from '../Utils/UsefullFunctions';
 
 
-const Requests = ({socket}) => {
+const Requests = () => {
   const token=  localStorage.getItem('AIchatToken')
-  const { requests,totalRequests,totalFriends,userDetails } = useContext(UserContext);
+  const { requests,totalRequests,totalFriends,userDetails,randomImage } = useContext(UserContext);
 
   const acceptRequest = (id,index) => {
     // Logic to accept request
     acceptRequests(userDetails?._id,id,token,totalRequests,totalFriends,requests,index)
   };
 
-  const deleteRequest = (id) => {
+  const deleteRequest = (id,index) => {
     // Logic to delete request
+    deleteRequests(userDetails?._id,id,token,totalRequests,requests,index)
   };
 
 
@@ -33,6 +34,11 @@ const Requests = ({socket}) => {
           className="bg-gray-50 p-4 rounded-lg shadow hover:shadow-md transition-all"
         >
           <h3 className="text-lg font-semibold text-gray-800">
+             <img
+          src={val.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
+          alt="Profile"
+          className="w-12 h-12 min-h-12 min-w-12 object-cover rounded-full border"
+        />
             {val?.fname} {val?.lname}
           </h3>
           <p className="text-sm text-gray-600 mb-4">{val?.email}</p>
@@ -53,7 +59,7 @@ const Requests = ({socket}) => {
             startIcon={<Delete/>}
               variant="contained"
               color="error"
-              onClick={() => deleteRequest(val._id)}
+              onClick={() => deleteRequest(val._id,requests.indexOf(val))}
               sx={{
                 textTransform: 'none',
               }}

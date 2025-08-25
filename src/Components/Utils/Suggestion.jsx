@@ -2,7 +2,7 @@ import {React,useContext} from 'react'
 import { PersonAdd } from '@mui/icons-material'
 import { UserContext } from '../../Context/UserProvider'
 const Suggestion = (props) => {
-  const {userDetails} = useContext(UserContext)
+  const {userDetails,randomImage} = useContext(UserContext)
   const token = localStorage.getItem('AIchatToken')
   const addFriend=async(receiverId)=>{
       const response = await fetch('http://localhost:5000/beSocial/add',{method:"POST",headers:{
@@ -13,7 +13,11 @@ const Suggestion = (props) => {
   return (
     <div id='suggestion' className='absolute top-[100%] gap-[20px] bg-white w-[27vw] p-[20px] flex flex-col shadow-md z-3'>
       {props.users.map(val=>(
-        <p key={val._id} id={val._id} className='p-[15px] relative shadow-md hover:shadow-lg bg-[#f7f7f7]'>{val.fname + ' ' + val.lname} <PersonAdd onClick={(e)=>{
+        <p key={val._id} id={val._id} className='p-[15px] relative shadow-md hover:shadow-lg bg-[#f7f7f7] flex items-center gap-4'> <img
+          src={val.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
+          alt="Profile"
+          className="w-12 h-12 object-cover rounded-full border"
+        /><span>{val.fname + ' ' + val.lname}</span> <PersonAdd onClick={(e)=>{
           addFriend(val._id)
         }} className='text-gray-400 cursor-pointer hover:text-gray-600  absolute right-[5%]'/> </p>
       ))}

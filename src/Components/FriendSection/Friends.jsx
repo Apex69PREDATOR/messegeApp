@@ -24,7 +24,7 @@ const Friends = (props) => {
           className="bg-gray-50 relative p-4 rounded-lg shadow hover:shadow-md transition-all flex gap-7"
         >
         <img
-          src={val.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
+          src={val.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
           alt="Profile"
           className="w-12 h-12 min-h-12 min-w-12 object-cover rounded-full border"
         />

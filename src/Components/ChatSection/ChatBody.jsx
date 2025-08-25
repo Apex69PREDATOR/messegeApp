@@ -168,7 +168,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
 
                 <p className={`text-${isSelf?'right':'left'} my-1`}>{msgObj?.text}</p>
                 {isSelf?seenArr.includes(msgObj._id) || isSeenByOther?<span className='absolute bottom-[0%] right-[0%]'><img
-          src={currentTalk?.profilePic || randomPic}
+          src={props?.otherProfile || randomPic}
           alt="Profile"
           className="w-5 h-5 object-cover rounded-full border"
         /></span>:null:null}
@@ -184,7 +184,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
                   : 'bg-gray-200 text-black rounded-tl-none'
               }`}> {msgObj?.text}  </span>
               {isSelf?seenArr.includes(msgObj._id) || isSeenByOther?<span className='absolute bottom-[0%] right-[3%]'><img
-          src={currentTalk?.profilePic || randomPic}
+          src={props?.otherProfile || randomPic}
           alt="Profile"
           className="w-5 h-5 object-cover rounded-full border"
         /></span>:null:null}

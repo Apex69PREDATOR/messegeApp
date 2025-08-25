@@ -29,5 +29,19 @@
     setCurrentName(name)
  }
 
+ export const deleteRequests = (selfId,deletedId,token,totalRequests,requests,index)=>{
+    
+    fetch(`http://localhost:5000/beSocial/decline`,{method:"POST",headers:{
+      'Authorization':`Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },body:JSON.stringify({selfId,deletedId})}).then(response=>(response.json()).then(result=>{
+         if(response.ok && result.success){
+          totalRequests(prev=>(prev.filter(val=>(val!==requests[index]))))
+         }
+    }))
+
+
+ }
+
 
 export default getRequests

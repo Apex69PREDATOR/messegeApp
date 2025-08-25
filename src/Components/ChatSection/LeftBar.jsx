@@ -73,7 +73,7 @@ const LeftBar = ({ socket }) => {
       <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50">
         <div className="relative w-14 h-14">
           <img
-            src={userDetails?.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
+            src={userDetails?.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
             alt="Profile"
             className="w-full h-full object-cover rounded-full border border-gray-300"
           />
@@ -83,6 +83,7 @@ const LeftBar = ({ socket }) => {
             localStorage.setItem('eabout',userDetails?.about)
             localStorage.setItem('email',userDetails?.email)
             localStorage.setItem('ephone',userDetails?.phone)
+            localStorage.setItem('ePic',userDetails?.profilePic)
             navigation('/editAccount')}}/>
         </div>
         <p className="font-medium text-gray-800 text-lg">
@@ -107,29 +108,29 @@ const LeftBar = ({ socket }) => {
       {/* Chats List */}
       <div className="flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
         {!searchedFriend ?
-        recentChats?.map(val =>
-          friends?.map((val2) => {
-            if (val.id == val2._id) {
-              const lastMessage = lastMessages?.get(val2._id)
+          recentChats?.map((val) => {
+             const recentFound = friends?.find(val2=>(val.id===val2._id))
+             if(recentFound){
+              const lastMessage = lastMessages?.get(recentFound._id)
               return (
                 <div
-                  key={val2._id}
+                  key={recentFound._id}
                   onClick={() => {
-                    setCurrentPerson(val2._id, setCurrentTalk, setCurrentName, val2?.fname)
+                    setCurrentPerson(recentFound._id, setCurrentTalk, setCurrentName, recentFound?.fname)
                   }}
                   className="flex items-center px-4 py-3 gap-4 hover:bg-gray-100 cursor-pointer transition-colors duration-200 border-b border-gray-100"
                 >
                   {/* Profile Image */}
                   <div className="relative w-12 h-12 min-w-12 min-h-12">
                     <img
-                      src={val2.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
+                      src={recentFound.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
                       alt="Profile"
                       className="w-full h-full object-cover rounded-full border border-gray-300"
                     />
                     <span
                       className={`absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-white ${
-                        recentSearchedForOnline.current.has(val2._id)
-                          ? onlineArr.includes(val2._id)
+                        recentSearchedForOnline.current.has(recentFound._id)
+                          ? onlineArr.includes(recentFound._id)
                             ? 'bg-green-500'
                             : 'bg-red-500'
                           : 'hidden'
@@ -140,18 +141,17 @@ const LeftBar = ({ socket }) => {
                   {/* Chat Info */}
                   <div className="flex flex-col flex-1">
                     <div className="flex justify-between items-center">
-                      <p className="font-medium text-gray-900">{val2.fname} {val2.lname}</p>
+                      <p className="font-medium text-gray-900">{recentFound.fname} {recentFound.lname}</p>
                       <span className="text-xs text-gray-500">{calculateDate(lastMessage?.sendAt)}</span>
                     </div>
                     <p className="text-sm text-gray-600 truncate">
-                      {(lastMessage?.senderId === userDetails?._id ? 'You: ' : `${val2?.fname}: `) + lastMessage?.text.substring(0,20)}
+                      {(lastMessage?.senderId === userDetails?._id ? 'You: ' : `${recentFound?.fname}: `) + lastMessage?.text.substring(0,20)}
                     </p>
                   </div>
                 </div>
               )
-            }
-          })
-        ):<SearchAmongFriends str={searchedFriend} calculateDate={calculateDate}/>
+             }
+          }):<SearchAmongFriends str={searchedFriend} calculateDate={calculateDate}/>
       }
       </div>
     </section>

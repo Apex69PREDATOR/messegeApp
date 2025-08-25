@@ -1,51 +1,89 @@
 import {useContext,useEffect,useState,useRef} from 'react'
+import {useNavigate} from 'react-router-dom'
 import { UserContext } from '../../Context/UserProvider'
 import { Camera,Edit } from '@mui/icons-material'
-import {TextField,Button} from '@mui/material'
+import {TextField,Button,Alert} from '@mui/material'
 import {useForm} from 'react-hook-form'
 
 const EditAcount = () => {
-    const {userDetails,randomImage} = useContext(UserContext)
+    const navigate = useNavigate()
+    const {randomImage} = useContext(UserContext)
     const token  = localStorage.getItem("AIchatToken")
     const fileselect = useRef()
+    const alertColor = useRef(null)
+    const [alertMessage,setAlertMessage] = useState(null)
     const [previousDetails,setPreviousDetails] = useState({})
     const [editFields,setEditFields] = useState(new Set())
     const [previewUrl,setPreviewUrl] = useState(null)
+    const [loading,isLoading] = useState(false)
     const [profilePic,setProfilePic] = useState(null)
+    const [navigatingAlert,setNavigatingAlert] = useState(false)
      const {handleSubmit,register} = useForm()
+     const EditAlertMessage = <>Please mark the edit <Edit className={`edit p-2 rounded-md bg-[#f7f7f7] shadow-md mx-1 hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}}
+         />    red  <Edit  className={`edit p-2 rounded-md bg-[#eb2d43] shadow-md hover:scale-110 mx-1 cursor-pointer`} style={{fontSize:'2em',color:'white'}}
+         />   of the following input fields to edit them</>
+
     const onSubmit=async (data)=>{
+     isLoading(true)
 
       const formData = new FormData()
 
       for (const val of editFields) {
         formData.append(val,data[val])
-        if(data[val]==='' || data[val]==previousDetails[val]){
-          alert('edited fields cannot be the same or empty!')
+        
+        if((data[val]==='' || data[val]==previousDetails[val])){
+          setAlertMessage('edited fields cannot be the same or empty!')
+          alertColor.current='error'
+       isLoading(false)
           return
         }
       }
+      
+      if(profilePic)
       formData.append('profilePic',profilePic)
+     else if(!editFields.size){
+       setAlertMessage(EditAlertMessage)
+       isLoading(false)
+       alertColor.current='error'
+       return
+     }
+
       const response  = await fetch('http://localhost:5000/profile/editProfile',{method:"POST",headers:{'Authorization':`Bearer ${token}`},body:formData})
+
+      const result = await response.json()
+       setAlertMessage(result?.message)
+       alertColor.current=response.status==500?'error':response.status==401?'warning':response.status==200?'success':''
+       isLoading(false)
+
+       if(response.ok && result.success){
+
+          localStorage.removeItem('AIchatToken')
+           setNavigatingAlert(true)
+           setTimeout(()=>{
+             navigate('/authorize')
+           },3000)
+       }
 
     }
   useEffect(()=>{
-    setPreviousDetails({eFname:localStorage.getItem('efname'),eLname:localStorage.getItem('elname'),eAbout:localStorage.getItem('eabout'),eMail:localStorage.getItem('email'),ePhone:localStorage.getItem('ephone')})
+    setPreviousDetails({eFname:localStorage.getItem('efname'),eLname:localStorage.getItem('elname'),eAbout:localStorage.getItem('eabout'),eMail:localStorage.getItem('email'),ePhone:localStorage.getItem('ephone'),ePic:localStorage.getItem('ePic')})
       return ()=>{
         localStorage.removeItem('efname')
         localStorage.removeItem('elname')
         localStorage.removeItem('eabout')
         localStorage.removeItem('email')
         localStorage.removeItem('ephone')
+        localStorage.removeItem('ePic')
       }
   },[])
   return (
-        <section id='editPage' className='flex flex-col  items-center  h-[99vh] w-[99vw] '>
+        <section id='editPage' className='flex flex-col relative items-center  h-[100vh] w-[100vw] bg-gradient-to-br from-blue-400 via-purple-400 to-pink-500'>
       <div className="profile w-[100%] h-[30%] flex items-center justify-center">
          <div className="relative w-40 h-40">
                   <img
-                    src={ previewUrl || userDetails?.profilePicture  || randomImage[Math.floor(Math.random() * randomImage.length)]}
+                    src={ previewUrl || previousDetails.ePic  || randomImage[Math.floor(Math.random() * randomImage.length)]}
                     alt="Profile"
-                    className="w-full h-full object-cover rounded-full border border-gray-300"
+                    className="w-full h-full object-cover rounded-full border border-gray-300 shadow-md"
                   />
                   <Camera className='absolute bottom-[5%] shadow-md right-[5%] bg-white rounded-full p-1 cursor-pointer editButton'   color='info' style={{fontSize:'2em'}} onClick={()=>{
                     fileselect.current.click()
@@ -53,9 +91,13 @@ const EditAcount = () => {
                 </div>
       </div>
       <div className="data w-[100%] h-[70%] flex justify-center">
-        <form className='flex flex-col p-6 gap-4' onSubmit={handleSubmit(onSubmit)}>
+        <form className='flex flex-col p-6 gap-4 rounded-md shadow-lg bg-[rgba(255,255,255,.3)]' onSubmit={handleSubmit(onSubmit)}>
           <div className='p-2 flex gap-20  items-center'>
-          <TextField type="text" variant='standard' style={{width:'25vw'}} label='first name' className='p-2' defaultValue={previousDetails?.eFname} {...register('eFname')} slotProps={{input:{readOnly:!editFields.has('eFname')}}} />
+
+          <TextField type="text" variant='standard' style={{width:'25vw'}} label='first name' className='p-2' defaultValue={previousDetails?.eFname} {...register('eFname')} slotProps={{input:{readOnly:!editFields.has('eFname')}}} onClick={()=>{!editFields.has('eFname') && setAlertMessage(EditAlertMessage)
+            alertColor.current='info'
+          }} />
+
           <Edit className={`edit p-2 rounded-md ${editFields.has('eFname')?'bg-[#eb2d43] text-white':'bg-[#f7f7f7]'}  shadow-md hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}} 
           onClick={()=>{
             setEditFields(prev=>{
@@ -67,7 +109,11 @@ const EditAcount = () => {
           /> 
           </div>
           <div className='p-2 flex gap-20  items-center'>
-          <TextField type="text" style={{width:'25vw'}} variant='standard' label='last name' className='p-2' defaultValue={previousDetails?.eLname} {...register('eLname')} slotProps={{input:{readOnly:!editFields.has('eLname')}}} />
+
+          <TextField type="text" style={{width:'25vw'}} variant='standard' label='last name' className='p-2' defaultValue={previousDetails?.eLname} {...register('eLname')} slotProps={{input:{readOnly:!editFields.has('eLname')}}} onClick={()=>{!editFields.has('eLname') && setAlertMessage(EditAlertMessage)
+            alertColor.current='info'
+          }}  />
+
            <Edit className={`edit p-2 rounded-md ${editFields.has('eLname')?'bg-[#eb2d43] text-white':'bg-[#f7f7f7]'}  shadow-md hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}}
            onClick={()=>{
             setEditFields(prev=>{
@@ -78,7 +124,10 @@ const EditAcount = () => {
            }}
            /> </div>
           <div className='p-2 flex gap-20  items-center' >
-          <textarea type="text" id='eAbout' placeholder='about yourself' className=" p-2 rounded w-[25vw]  border border-[rgba(0,0,0,0.4)]" defaultValue={previousDetails.eabout!=='undefined'?previousDetails.eabout:''}  {...register('eAbout')} readOnly={!editFields.has('eAbout')}  >
+
+          <textarea type="text" id='eAbout' placeholder='about yourself' className=" p-2 rounded w-[25vw]  border border-[rgba(0,0,0,0.4)]" defaultValue={previousDetails?.eAbout!=='undefined'?previousDetails.eAbout:''}  {...register('eAbout')} readOnly={!editFields.has('eAbout')} onClick={()=>{!editFields.has('eAbout') && setAlertMessage(EditAlertMessage)
+            alertColor.current='info'
+          }} >
             
           </textarea>
           <Edit className={`edit p-2 rounded-md ${editFields.has('eAbout')?'bg-[#eb2d43] text-white':'bg-[#f7f7f7]'} shadow-md hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}}
@@ -91,7 +140,11 @@ const EditAcount = () => {
            }}/>
           </div>
           <div className='p-2 flex gap-20  items-center'>
-          <TextField type="email" id='eMail' style={{width:'25vw'}} variant='standard' label='New email' className='p-2' defaultValue={previousDetails?.eMail} {...register('eMail')} slotProps={{input:{readOnly:!editFields.has('eMail')}}} />
+
+          <TextField type="email" id='eMail' style={{width:'25vw'}} variant='standard' label='New email' className='p-2' defaultValue={previousDetails?.eMail} {...register('eMail')} slotProps={{input:{readOnly:!editFields.has('eMail')}}} onClick={()=>{!editFields.has('eMail') && setAlertMessage(EditAlertMessage)
+            alertColor.current='info'
+          }} />
+
            <Edit className={`edit p-2 rounded-md ${editFields.has('eMail')?'bg-[#eb2d43] text-white':'bg-[#f7f7f7]'}  shadow-md hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}}
            onClick={()=>{
             setEditFields(prev=>{
@@ -101,9 +154,13 @@ const EditAcount = () => {
             })
            }}
            />
+
           </div>
          <div className='p-2 flex gap-20  items-center'>
-          <TextField id='eNumber'  variant='standard' style={{width:'25vw'}} label='New Number' className='p-2'  defaultValue={previousDetails?.ePhone} {...register('eNumber')} slotProps={{input:{readOnly:!editFields.has('eNumber')}}} />
+
+          <TextField id='eNumber'  variant='standard' style={{width:'25vw'}} label='New Number' className='p-2'  defaultValue={previousDetails?.ePhone} {...register('eNumber')} slotProps={{input:{readOnly:!editFields.has('eNumber')}}} onClick={()=>{!editFields.has('eNumber') && setAlertMessage(EditAlertMessage)
+             alertColor.current='info'}}/>
+
            <Edit className={`edit p-2 rounded-md ${editFields.has('eNumber')?'bg-[#eb2d43] text-white':'bg-[#f7f7f7]'}  shadow-md hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}} onClick={()=>{
             setEditFields(prev=>{
               const newSet = new Set(prev)
@@ -112,7 +169,11 @@ const EditAcount = () => {
             })
            }}/>
           </div>
-          <Button type='submit' variant='contained' disabled={editFields.size?false:true}>Confirm Changes</Button>
+          <Button type='submit' variant='contained' disabled={loading}>{loading?'Confirming...':'Confirm Changes'}</Button>
+          {alertMessage && <Alert variant='standard' className='absolute top-[10%] left-[30%]' closeText='ok' onClose={()=>{setAlertMessage(null)
+           alertColor.current=null
+          }} color={alertColor.current}>{typeof alertMessage === "string" ? alertMessage : alertMessage}</Alert>}
+          {navigatingAlert && <Alert variant='standard'  className='absolute top-[22%] left-[36%]' color='info'><b>Navigating to authorize page, do not close this page</b></Alert>}
         </form>
       </div>
       <input type="file" onChange={(e)=>{
