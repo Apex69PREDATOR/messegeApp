@@ -1,6 +1,6 @@
 import {useState,useEffect,useContext,useRef} from 'react'
-import { Button} from '@mui/material'
-import { Send , AttachFile,Cancel,StickyNote2} from '@mui/icons-material'
+import { Button,Alert} from '@mui/material'
+import { Send , AttachFile,Cancel} from '@mui/icons-material'
 import {useForm} from 'react-hook-form'
 import WelcomeMessage from './WelcomeMessage'
 import ChatHeader from './ChatHeader'
@@ -14,6 +14,7 @@ const CurrentChat = (props) => {
   const [allMessage , setAllMessage] = useState([])
   const [fileArr,setFileArr] = useState([])
   const [otherProfile,setOtherProfile] = useState(null)
+  const [alertMessage,setAlertMessage] = useState(null)
   const {register,handleSubmit} = useForm()
   const randomBackGroundArr = ['https://images.pexels.com/photos/9539474/pexels-photo-9539474.jpeg','https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg','https://images.pexels.com/photos/1645668/pexels-photo-1645668.jpeg','https://i.pinimg.com/736x/5c/0c/3a/5c0c3a646d366e220c445d2a0d7cef46.jpg','https://png.pngtree.com/background/20240824/original/pngtree-blue-and-purple-neon-star-3d-art-background-with-a-cool-picture-image_10210904.jpg','https://cdn.wallpapersafari.com/43/82/Z9szGWV.webp','https://plus.unsplash.com/premium_photo-1681426327290-1ec5fb4d3dd8?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y29vbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=3000'] 
 
@@ -43,6 +44,13 @@ const CurrentChat = (props) => {
 
   const sendMessage=async (data)=>{
     data.to = currentTalk
+    const ifMoreThan198 = fileArr.find(file=>(file.size>150*1024*1024))
+    
+    if(ifMoreThan198){
+      setAlertMessage('each file size should not me more than 150 mb')
+      return
+    }
+
     if(fileArr.length>0){
      data.files = await Promise.all(fileArr.map(fileToBase64))  
     }
@@ -114,6 +122,7 @@ const CurrentChat = (props) => {
   return (
     <form className={`w-[70vw]  relative gap-10 items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
       <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[87vh] z-0 rounded-md'/>
+      {alertMessage && <Alert  variant='standard' sx={{padding:'15px'}} className='absolute z-3  top-[10%] left-[30%]' closeText='ok' color='error' onClose={()=>{setAlertMessage(null) }} >{alertMessage}</Alert>}
       <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[87vh] rounded-md"></div>
      {currentTalk?<ChatHeader profilePic={otherProfile} name={currentName}  currentTalk={currentTalk} onlineArr={onlineArr}/>:<WelcomeMessage userDetails={props?.userDetails}/>}
      <ChatBody allMessage={allMessage} otherProfile={otherProfile} userDetails={props?.userDetails} socket={props.socket}/>
