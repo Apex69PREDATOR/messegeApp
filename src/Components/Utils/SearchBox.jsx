@@ -5,7 +5,7 @@ const SearchBox = () => {
   const [users,SearchedUsers] = useState(null)
     const search=async(param)=>{
         if(param){
-        const response = await fetch('http://localhost:5000/find/search',{method:"POST",headers:{
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/find/search`,{method:"POST",headers:{
       'Content-type':'application/json'
     },body:JSON.stringify({param})})
     const result = await response.json()

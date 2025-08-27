@@ -1,6 +1,6 @@
  const getRequests=(id,token,totalRequests,totalFriends)=>{
       
-      fetch(`http://localhost:5000/beSocial/pending/${id}`,{method:"GET",headers:{
+      fetch(`${import.meta.env.VITE_SERVER_URL}/beSocial/pending/${id}`,{method:"GET",headers:{
       'Authorization':`Bearer ${token}`
     }}).then(response=>(response.json()).then(result=>{
          if(response.ok && result.success){
@@ -11,7 +11,7 @@
     }
  export const acceptRequests = (selfId,acceptId,token,totalRequests,totalFriends,requests,index)=>{
       
-      fetch(`http://localhost:5000/beSocial/accept`,{method:"POST",headers:{
+      fetch(`${import.meta.env.VITE_SERVER_URL}/beSocial/accept`,{method:"POST",headers:{
       'Authorization':`Bearer ${token}`,
       'Content-Type': 'application/json'
     },body:JSON.stringify({selfId,acceptId})}).then(response=>(response.json()).then(result=>{
@@ -31,7 +31,7 @@
 
  export const deleteRequests = (selfId,deletedId,token,totalRequests,requests,index)=>{
     
-    fetch(`http://localhost:5000/beSocial/decline`,{method:"POST",headers:{
+    fetch(`${import.meta.env.VITE_SERVER_URL}/beSocial/decline`,{method:"POST",headers:{
       'Authorization':`Bearer ${token}`,
       'Content-Type': 'application/json'
     },body:JSON.stringify({selfId,deletedId})}).then(response=>(response.json()).then(result=>{

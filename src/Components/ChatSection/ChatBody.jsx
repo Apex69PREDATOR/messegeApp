@@ -122,7 +122,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
    },[props.allMessage])
 
   return (
-    <section id='chatSection' className="w-[70%] relative h-[55vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar z-2">
+    <section id='chatSection' className="w-[85%] relative h-[55vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar z-2">
       { idate && <p className='bg-gray-200 p-1 opacity-60 rounded-md fixed top-[24%] left-[56.5%] z-4'>{idate}</p> }
       {props?.allMessage?.map((msgObj,i) => {
         const isSelf = msgObj?.senderId === props.userDetails._id;
@@ -153,7 +153,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
             msgObj.isFile ?
             msgObj.path.map(file=>{
               
-              const fileUrl = `http://localhost:5000/uploads/${file}`
+              const fileUrl = `${import.meta.env.VITE_SERVER_URL}/uploads/${file}`
               const ArraySeperatedByDots = file?.split('.') 
               const extension = ArraySeperatedByDots[ArraySeperatedByDots.length-1]
               const splitedName = file.split('-')
@@ -164,7 +164,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
                   ? 'bg-blue-500 text-white rounded-tr-none'
                   : 'bg-gray-200 text-black rounded-tl-none'
               }`}   style={{cursor:'pointer'}} >
-                {commonImageFormats.includes(extension)?<img src={fileUrl} className=' max-w-[350px] max-h-[350px]' alt="not found" />:commonDocumentFormats.includes(extension)? <iframe className='max-h-[350px]'
+                {commonImageFormats.includes(extension)?<img src={fileUrl} className=' max-w-[400px] max-h-[350px]' alt="not found" />:commonDocumentFormats.includes(extension)? <iframe className='max-h-[350px]'
   src={`${fileUrl}`}  
   width="100%" 
   height="400px"

@@ -8,7 +8,7 @@ const Signup = () => {
    const {setUserDetails} = useContext(UserContext)
   const signIn = (data) => {
     // Handle registration logic here
-     fetch('http://localhost:5000/auth/signup',{method:"POST",headers:{
+     fetch(`${import.meta.env.VITE_SERVER_URL}/auth/signup`,{method:"POST",headers:{
       'Content-type':'application/json'
     },body:JSON.stringify(data)}).then(response=>(response.json()).then(result=>{
       if(response.ok && result.success){

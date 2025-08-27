@@ -17,7 +17,7 @@ const Individual = () => {
   
   const [seeFriends,setSeeFriends] = useState(false)
     const verify=()=>{
-       fetch('http://localhost:5000/auth/validate',{method:"GET",headers:{
+       fetch(`${import.meta.env.VITE_SERVER_URL}/auth/validate`,{method:"GET",headers:{
       'Authorization':`Bearer ${token}`
     }}).then(response=>(response.json()).then(result=>{
       if(response.ok && result.success){
@@ -34,7 +34,7 @@ const Individual = () => {
  useEffect(()=>{
   if(userDetails){
     getRequests(userDetails?._id,token,totalRequests,totalFriends)
-  socket.current = new WebSocket(`ws://localhost:8080?userId=${userDetails?._id}`)
+  socket.current = new WebSocket(`${import.meta.env.VITE_WS_URL}?userId=${userDetails?._id}`)
   }
 
  },[userDetails])

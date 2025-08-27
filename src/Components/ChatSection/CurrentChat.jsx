@@ -120,7 +120,7 @@ const CurrentChat = (props) => {
   } 
     
   return (
-    <form className={`w-[70vw]  relative gap-10 items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
+    <form className={`w-[67vw]  relative gap-10 items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
       <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[87vh] z-0 rounded-md'/>
       {alertMessage && <Alert  variant='standard' sx={{padding:'15px'}} className='absolute z-3  top-[10%] left-[30%]' closeText='ok' color='error' onClose={()=>{setAlertMessage(null) }} >{alertMessage}</Alert>}
       <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[87vh] rounded-md"></div>

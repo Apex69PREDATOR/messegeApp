@@ -13,7 +13,7 @@ const Login = () => {
      localStorage.removeItem('currentP')
      localStorage.removeItem('currentN')
      await new Promise((resolve)=>(setTimeout(resolve,500)))
-     fetch('http://localhost:5000/auth/login',{method:"POST",headers:{
+     fetch(`${import.meta.env.VITE_SERVER_URL}/auth/login`,{method:"POST",headers:{
       'Content-type':'application/json'
     },body:JSON.stringify(data)}).then(response=>(response.json()).then(result=>{
       alert(result.message)
