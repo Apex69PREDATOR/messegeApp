@@ -19,7 +19,7 @@ const CurrentChat = (props) => {
   const randomBackGroundArr = ['https://images.pexels.com/photos/9539474/pexels-photo-9539474.jpeg','https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg','https://images.pexels.com/photos/1645668/pexels-photo-1645668.jpeg','https://i.pinimg.com/736x/5c/0c/3a/5c0c3a646d366e220c445d2a0d7cef46.jpg','https://png.pngtree.com/background/20240824/original/pngtree-blue-and-purple-neon-star-3d-art-background-with-a-cool-picture-image_10210904.jpg','https://cdn.wallpapersafari.com/43/82/Z9szGWV.webp','https://plus.unsplash.com/premium_photo-1681426327290-1ec5fb4d3dd8?fm=jpg&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y29vbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D&ixlib=rb-4.1.0&q=60&w=3000'] 
 
   const randomBackGround = randomBackGroundArr[Math.floor(Math.random() * randomBackGroundArr.length)] 
-  const {currentTalk,currentName,onlineArr,setOnlineArr,recentSearchedForOnline,userDetails,friends} = useContext(UserContext)
+  const {currentTalk,currentName,onlineArr,setOnlineArr,recentSearchedForOnline,userDetails,friends,setViewDetailsId} = useContext(UserContext)
   
     async function throughWS(data){
      const repeat = setInterval(()=>{
@@ -124,7 +124,7 @@ const CurrentChat = (props) => {
       <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[87vh] z-0 rounded-md'/>
       {alertMessage && <Alert  variant='standard' sx={{padding:'15px'}} className='absolute z-3  top-[10%] left-[30%]' closeText='ok' color='error' onClose={()=>{setAlertMessage(null) }} >{alertMessage}</Alert>}
       <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[87vh] rounded-md"></div>
-     {currentTalk?<ChatHeader profilePic={otherProfile} name={currentName}  currentTalk={currentTalk} onlineArr={onlineArr}/>:<WelcomeMessage userDetails={props?.userDetails}/>}
+     {currentTalk?<ChatHeader setViewDetailsId={setViewDetailsId} profilePic={otherProfile} name={currentName}  currentTalk={currentTalk} onlineArr={onlineArr}/>:<WelcomeMessage userDetails={props?.userDetails}/>}
      <ChatBody allMessage={allMessage} otherProfile={otherProfile} userDetails={props?.userDetails} socket={props.socket}/>
      <div className='w-[60%] flex z-2 p-2 mb-2 bg-white rounded'>
       {fileArr.length > 0 && (

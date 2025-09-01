@@ -8,7 +8,7 @@ import { UserContext } from '../../Context/UserProvider';
 
 const ShowFriends = (props) => {
   const [current, setCurrent] = useState(true);
-  const {requests} = useContext(UserContext)
+  const {requests,friends} = useContext(UserContext)
 
   return (
     <div id="showReq&Frnd" className="p-6 bg-white z-3 fixed top-[20vh] left-[10vw] rounded-xl shadow-lg w-[60%]  mx-auto">
@@ -31,6 +31,14 @@ const ShowFriends = (props) => {
               position: 'relative'
             },
           }}
+          endIcon={<Badge
+          badgeContent={friends.length}
+          color='info'
+          overlap='circular'
+          showZero={false}
+          sx={{margin:'0 5px'}}
+          >
+         </Badge>}
         >
           Friends
         </Button>

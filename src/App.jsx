@@ -2,6 +2,7 @@ import Auth from './Components/Auth'
 import Individual from './Components/ChatSection/Individual'
 import {createBrowserRouter,RouterProvider} from 'react-router-dom'
 import EditAcount from './Components/Accounts/EditAcount'
+import ViewProfile from './Components/FriendSection/ViewProfile'
 const App = () => {
   const Route=createBrowserRouter([
     {
@@ -15,6 +16,10 @@ const App = () => {
     {
       path: '/editAccount',
       element: <EditAcount/>
+    },
+    {
+      path: '/viewProfile',
+      element: <ViewProfile/>
     }
   ])
   return (

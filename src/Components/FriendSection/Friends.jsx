@@ -35,7 +35,7 @@ const Friends = (props) => {
           </h3>
           <p className="text-sm text-gray-600">{val?.email}</p>
           </span>
-          {viewId===val._id?<VieworChat name={val?.fname}  id={val?._id}/>:null}
+          {viewId===val._id?<VieworChat name={val?.fname} fullDetails={val}  id={val?._id}/>:null}
         </div>
       ))}
     </section>
