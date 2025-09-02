@@ -48,7 +48,7 @@ const EditAcount = () => {
        return
      }
 
-      const response  = await fetch('http://localhost:5000/profile/editProfile',{method:"POST",headers:{'Authorization':`Bearer ${token}`},body:formData})
+      const response  = await fetch(`${import.meta.env.VITE_SERVER_URL}/profile/editProfile`,{method:"POST",headers:{'Authorization':`Bearer ${token}`},body:formData})
 
       const result = await response.json()
        setAlertMessage(result?.message)
