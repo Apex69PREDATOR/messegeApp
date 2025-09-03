@@ -67,7 +67,7 @@ const LeftBar = ({ socket }) => {
   }
 
   return (
-    <section className="flex flex-col w-[25%] bg-white border-r border-gray-200 h-screen overflow-hidden">
+    <section className="flex flex-col md:w-[25%] w-[99%] bg-white border-r border-gray-200 md:h-screen md:max-h-screen max-h-[40vh] overflow-hidden ">
       
       {/* Profile Section */}
       <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50">
@@ -94,6 +94,7 @@ const LeftBar = ({ socket }) => {
       {/* Search */}
       <div className="px-4 py-3 border-b border-gray-200">
         <TextField
+        
           variant="outlined"
           placeholder="Search friends..."
           size="small"
@@ -106,7 +107,7 @@ const LeftBar = ({ socket }) => {
       </div>
 
       {/* Chats List */}
-      <div className="flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+      <div className="flex md:flex-col md:p-0 p-1 md:gap-0 gap-2 overflow-auto scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
         {!searchedFriend ?
           recentChats?.map((val) => {
              const recentFound = friends?.find(val2=>(val.id===val2._id))
@@ -118,7 +119,7 @@ const LeftBar = ({ socket }) => {
                   onClick={() => {
                     setCurrentPerson(recentFound._id, setCurrentTalk, setCurrentName, recentFound?.fname)
                   }}
-                  className="flex items-center px-4 py-3 gap-4 hover:bg-gray-100 cursor-pointer transition-colors duration-200 border-b border-gray-100"
+                  className="flex md:flex-row flex-col md:justify-center justify-evenly md:px-4 px-3 py-3 gap-4 hover:bg-gray-100 cursor-pointer transition-colors duration-200 border-b border-gray-100 rounded shadow-md md:h-auto  h-[160px] md:w-auto w-[150px] flex-shrink-0"
                 >
                   {/* Profile Image */}
                   <div className="relative w-12 h-12 min-w-12 min-h-12">
@@ -140,8 +141,8 @@ const LeftBar = ({ socket }) => {
 
                   {/* Chat Info */}
                   <div className="flex flex-col flex-1">
-                    <div className="flex justify-between items-center">
-                      <p className="font-medium text-gray-900">{recentFound.fname} {recentFound.lname}</p>
+                    <div className="flex justify-between md:gap-0 gap-2 items-center">
+                      <p className="font-medium  text-gray-900" style={{fontSize:window.innerWidth>=769?'1em':'0.9em'}}>{recentFound.fname} {recentFound.lname}</p>
                       <span className="text-xs text-gray-500">{calculateDate(lastMessage?.sendAt)}</span>
                     </div>
                     <p className="text-sm text-gray-600 truncate">

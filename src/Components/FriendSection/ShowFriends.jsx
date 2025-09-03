@@ -11,7 +11,7 @@ const ShowFriends = (props) => {
   const {requests,friends} = useContext(UserContext)
 
   return (
-    <div id="showReq&Frnd" className="p-6 bg-white z-3 fixed top-[20vh] left-[10vw] rounded-xl shadow-lg w-[60%]  mx-auto">
+    <div id="showReq&Frnd" className="p-6 bg-white z-3 absolute top-[5%] left-[10%] md:w-[700px] w-[390px] rounded-xl shadow-lg w-[60%]  mx-auto">
       <Cancel onClick={()=>{
         props?.setSeeFriends(false)
       }}  style={{position:'absolute',top:'2%',right:'1%',cursor:'pointer'}}/>

@@ -30,8 +30,8 @@ const Suggestion = (props) => {
   }
   return (
     <>
-    {message && <Alert color={color} closeText='close' sx={{padding:'10px',boxShadow:'5px 5px 10px black'}} variant='standard' onClose={()=>{setMessage(null) }} className='fixed top-[10%] left-[45%] z-5'><b>{message}</b></Alert>}
-    <div id='suggestion' className='absolute top-[100%] gap-[20px] bg-white w-[27vw] p-[20px] flex flex-col shadow-md z-3'>
+    {message && <Alert color={color} closeText='close' sx={{padding:'10px',boxShadow:'5px 5px 10px black'}} variant='standard' onClose={()=>{setMessage(null) }} className='fixed md:top-[10%] top-[30%] md:left-[45%] left-[25%] z-5'><b>{message}</b></Alert>}
+    <div id='suggestion' className='absolute top-[100%] gap-[20px] bg-white md:w-[27vw] w-[60vw] p-[20px] flex flex-col shadow-md z-3'>
       {props?.users?.map(val=>(
         <p key={val._id} id={val._id} className='p-[15px] relative shadow-md hover:shadow-lg bg-[#f7f7f7] flex items-center gap-4 cursor-pointer' onClick={()=>{
           setViewDetailsId(val._id)

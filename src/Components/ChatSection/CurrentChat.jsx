@@ -120,13 +120,13 @@ const CurrentChat = (props) => {
   } 
     
   return (
-    <form className={`w-[67vw]  relative gap-10 items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
-      <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[87vh] z-0 rounded-md'/>
+    <form className={`md:w-[67vw] w-[99%]  relative md:gap-10 gap-5  items-center flex flex-col  bg-blue-100 rounded-md`} onSubmit={handleSubmit(sendMessage)}>
+      <img src={randomBackGround} alt=""  className='absolute top-[0] left-[0] w-[100%] h-[85vh] md:h-[88vh] z-0 rounded-md'/>
       {alertMessage && <Alert  variant='standard' sx={{padding:'15px'}} className='absolute z-3  top-[10%] left-[30%]' closeText='ok' color='error' onClose={()=>{setAlertMessage(null) }} >{alertMessage}</Alert>}
-      <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[87vh] rounded-md"></div>
+      <div className="sheet absolute bg-black opacity-65 z-1 w-[100%] h-[85vh] rounded-md md:h-[88vh]"></div>
      {currentTalk?<ChatHeader setViewDetailsId={setViewDetailsId} profilePic={otherProfile} name={currentName}  currentTalk={currentTalk} onlineArr={onlineArr}/>:<WelcomeMessage userDetails={props?.userDetails}/>}
      <ChatBody allMessage={allMessage} otherProfile={otherProfile} userDetails={props?.userDetails} socket={props.socket}/>
-     <div className='w-[60%] flex z-2 p-2 mb-2 bg-white rounded'>
+     <div className='md:w-[60%] w-[100%] flex z-2 p-2  shadow-md mb-2 bg-white rounded'>
       {fileArr.length > 0 && (
   <div className="files flex absolute gap-3 overflow-x-auto bottom-[12%] p-2 max-w-[80%] rounded-lg bg-white/70 backdrop-blur-sm shadow-md">
     {fileArr.map((file, index) => {
@@ -163,9 +163,9 @@ const CurrentChat = (props) => {
   </div>
 )}
 
-     <input className='bg-white p-2 w-[65%] rounded'  {...register('message',{required:true})} id="message" placeholder={fileArr.length<=0?'write a message 🗨️ or attach a file 📂':'Enter a description for the files'}/>
-     <Button  endIcon={<AttachFile/>} type='button'  color='primary'  style={{padding:'10px 10px'}} onClick={()=>{fileElement.current.click()}}  />
-     <Button  startIcon={<Send/>} type='submit'  color='primary'  style={{padding:'10px 30px'}}  variant='outlined' disabled={wait} >{wait?'Generating...':"Send"}</Button>
+     <input className='bg-white p-2 md:w-[65%] w-[80%] rounded'  {...register('message',{required:true})} id="message" placeholder={fileArr.length<=0?'write a message 🗨️ or attach a file 📂':'Enter a description for the files'}/>
+     <Button  endIcon={<AttachFile/>} type='button'  color='primary'  style={{padding:`${window.innerWidth>=769?'10px':'2px'}`}} onClick={()=>{fileElement.current.click()}}  />
+     <Button  startIcon={<Send/>} type='submit'  color='primary'  style={{padding:`${window.innerWidth>=769?'10px 30px':'5px 10px'}`}}  variant='outlined' disabled={wait} >{wait?'Generating...':"Send"}</Button>
      </div>
      <input type="file" multiple style={{display:"none"}} onChange={handleFileChange} ref={fileElement}/>
     </form>

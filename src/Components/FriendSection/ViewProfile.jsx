@@ -153,7 +153,7 @@ const ViewProfile = () => {
         </div>
         <Divider />
 
-        <div className="flex flex-wrap gap-6 overflow-auto max-h-[40vh] p-2">
+        <div className="flex flex-wrap md:gap-6 gap-2 overflow-auto max-h-[40vh] md:p-2">
           {userFriends?.map((friend) => {
             let isFriend = friends.some((f) => f._id === friend._id);
             let isSelf = friend._id === userDetails._id;
@@ -161,7 +161,7 @@ const ViewProfile = () => {
                 <div
                   key={friend._id}
                   id={friend._id}
-                  className="flex flex-col items-center gap-2 w-40 p-4 rounded-xl shadow-sm bg-gray-100 hover:shadow-md transition cursor-pointer"
+                  className="flex flex-col items-center gap-2 md:w-40 w-35 md:p-4 p-3 rounded-xl shadow-sm bg-gray-100 hover:shadow-md transition cursor-pointer flex-shrink-0"
                   onClick={()=>{
                     setViewDetailsId(friend._id)
                     setMutualFriends(0);

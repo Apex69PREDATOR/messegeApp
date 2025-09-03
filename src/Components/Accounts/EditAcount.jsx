@@ -94,7 +94,7 @@ const EditAcount = () => {
         <form className='flex flex-col p-6 gap-4 rounded-md shadow-lg bg-[rgba(255,255,255,.3)]' onSubmit={handleSubmit(onSubmit)}>
           <div className='p-2 flex gap-20  items-center'>
 
-          <TextField type="text" variant='standard' style={{width:'25vw'}} label='first name' className='p-2' defaultValue={previousDetails?.eFname} {...register('eFname')} slotProps={{input:{readOnly:!editFields.has('eFname')}}} onClick={()=>{!editFields.has('eFname') && setAlertMessage(EditAlertMessage)
+          <TextField type="text" variant='standard' label='first name' className='p-2  md:w-[25vw] w-[50vw]' defaultValue={previousDetails?.eFname} {...register('eFname')} slotProps={{input:{readOnly:!editFields.has('eFname')}}} onClick={()=>{!editFields.has('eFname') && setAlertMessage(EditAlertMessage)
             alertColor.current='info'
           }} />
 
@@ -110,7 +110,7 @@ const EditAcount = () => {
           </div>
           <div className='p-2 flex gap-20  items-center'>
 
-          <TextField type="text" style={{width:'25vw'}} variant='standard' label='last name' className='p-2' defaultValue={previousDetails?.eLname} {...register('eLname')} slotProps={{input:{readOnly:!editFields.has('eLname')}}} onClick={()=>{!editFields.has('eLname') && setAlertMessage(EditAlertMessage)
+          <TextField type="text"  variant='standard' label='last name' className='p-2 md:w-[25vw] w-[50vw]' defaultValue={previousDetails?.eLname} {...register('eLname')} slotProps={{input:{readOnly:!editFields.has('eLname')}}} onClick={()=>{!editFields.has('eLname') && setAlertMessage(EditAlertMessage)
             alertColor.current='info'
           }}  />
 
@@ -125,7 +125,7 @@ const EditAcount = () => {
            /> </div>
           <div className='p-2 flex gap-20  items-center' >
 
-          <textarea type="text" id='eAbout' placeholder='about yourself' className=" p-2 rounded w-[25vw]  border border-[rgba(0,0,0,0.4)]" defaultValue={previousDetails?.eAbout!=='undefined'?previousDetails.eAbout:''}  {...register('eAbout')} readOnly={!editFields.has('eAbout')} onClick={()=>{!editFields.has('eAbout') && setAlertMessage(EditAlertMessage)
+          <textarea type="text" id='eAbout' placeholder='about yourself' className=" p-2 rounded md:w-[25vw] w-[50vw]  border border-[rgba(0,0,0,0.4)]" defaultValue={previousDetails?.eAbout!=='undefined'?previousDetails.eAbout:''}  {...register('eAbout')} readOnly={!editFields.has('eAbout')} onClick={()=>{!editFields.has('eAbout') && setAlertMessage(EditAlertMessage)
             alertColor.current='info'
           }} >
             
@@ -141,7 +141,7 @@ const EditAcount = () => {
           </div>
           <div className='p-2 flex gap-20  items-center'>
 
-          <TextField type="email" id='eMail' style={{width:'25vw'}} variant='standard' label='New email' className='p-2' defaultValue={previousDetails?.eMail} {...register('eMail')} slotProps={{input:{readOnly:!editFields.has('eMail')}}} onClick={()=>{!editFields.has('eMail') && setAlertMessage(EditAlertMessage)
+          <TextField type="email" id='eMail' variant='standard' label='New email' className='p-2  md:w-[25vw] w-[50vw]' defaultValue={previousDetails?.eMail} {...register('eMail')} slotProps={{input:{readOnly:!editFields.has('eMail')}}} onClick={()=>{!editFields.has('eMail') && setAlertMessage(EditAlertMessage)
             alertColor.current='info'
           }} />
 
@@ -158,7 +158,7 @@ const EditAcount = () => {
           </div>
          <div className='p-2 flex gap-20  items-center'>
 
-          <TextField id='eNumber'  variant='standard' style={{width:'25vw'}} label='New Number' className='p-2'  defaultValue={previousDetails?.ePhone} {...register('eNumber')} slotProps={{input:{readOnly:!editFields.has('eNumber')}}} onClick={()=>{!editFields.has('eNumber') && setAlertMessage(EditAlertMessage)
+          <TextField id='eNumber'  variant='standard' label='New Number' className='p-2  md:w-[25vw] w-[50vw]'  defaultValue={previousDetails?.ePhone} {...register('eNumber')} slotProps={{input:{readOnly:!editFields.has('eNumber')}}} onClick={()=>{!editFields.has('eNumber') && setAlertMessage(EditAlertMessage)
              alertColor.current='info'}}/>
 
            <Edit className={`edit p-2 rounded-md ${editFields.has('eNumber')?'bg-[#eb2d43] text-white':'bg-[#f7f7f7]'}  shadow-md hover:scale-110 cursor-pointer`} style={{fontSize:'2em'}} onClick={()=>{

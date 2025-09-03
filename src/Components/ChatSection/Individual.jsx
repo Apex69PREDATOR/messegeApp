@@ -61,11 +61,11 @@ const Individual = () => {
    addIncommingRequests()
   },[socket.current])
   return (
-    <section className='w-[100%] flex  evenly'>
+    <section className='w-[100%] flex md:flex-row  flex-col  evenly'>
       <LeftBar socket={socket.current}/>
-    <div className='w-[72%] flex  items-center flex-col gap-[2vh]'>
+    <div className='md:w-[72%] w-[100%] flex relative items-center flex-col gap-2'>
     {seeFriends && <ShowFriends socket={socket.current} setSeeFriends={setSeeFriends}/>}
-    <div className='flex items-center gap-[5vw] w-[80%] p-[1vw]' ><Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
+    <div className='flex items-center gap-[5vw] md:w-[80%] w-[100%] p-[0.5vw]' ><Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
   All Friends
   <Badge
           badgeContent={requests?.length}

@@ -122,8 +122,8 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
    },[props.allMessage])
 
   return (
-    <section id='chatSection' className="w-[85%] relative h-[55vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar z-2">
-      { idate && <p className='bg-gray-200 p-1 opacity-60 rounded-md fixed top-[24%] left-[56.5%] z-4'>{idate}</p> }
+    <section id='chatSection' className="md:w-[85%] w-[100%] relative md:h-[59vh] h-[65vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar z-2">
+      { idate && <p className='bg-gray-200 p-1 opacity-60 rounded-md absolute top-0 sticky self-center z-10'>{idate}</p> }
       {props?.allMessage?.map((msgObj,i) => {
         const isSelf = msgObj?.senderId === props.userDetails._id;
         const isSeenBySelf = msgObj?.seenBy?.includes(props.userDetails._id)
@@ -164,14 +164,14 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
                   ? 'bg-blue-500 text-white rounded-tr-none'
                   : 'bg-gray-200 text-black rounded-tl-none'
               }`}   style={{cursor:'pointer'}} >
-                {commonImageFormats.includes(extension)?<img src={fileUrl} className=' max-w-[400px] max-h-[350px]' alt="not found" />:commonDocumentFormats.includes(extension)? <iframe className='max-h-[350px]'
+                {commonImageFormats.includes(extension)?<img src={fileUrl} className=' md:max-w-[400px] max-w-[350px] max-h-[350px]' alt="not found" />:commonDocumentFormats.includes(extension)? <iframe className='max-h-[350px]'
   src={`${fileUrl}`}  
   width="100%" 
   height="400px"
   ></iframe>:commonVideoFormats.includes(extension)? <ReactPlayer
    src={fileUrl}
    controls
-   className=' max-h-[350px]'
+   className='max-h-[350px] max-w-[350px]'
   />
    : <div><p className={`text-[${isSelf?'#dedee0':'#503dfc'}] p-2 ${isSelf?'bg-[#2b75ed]':'bg-[#d7d7d9]'} mb-4`}>{lastName.length>25?lastName.substring(0,25)+'...':lastName}</p><a href={fileUrl}  download={lastName}><Button variant='contained' color='secondary' style={{fontSize:'0.8em'}}>Download to see</Button></a></div>
 
