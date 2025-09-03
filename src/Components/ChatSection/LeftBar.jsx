@@ -5,12 +5,14 @@ import { TextField } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import { setCurrentPerson } from '../Utils/UsefullFunctions'
 import SearchAmongFriends from './SearchAmongFriends'
+import EditOrLogOut from '../Utils/EditOrLogOut'
 
 const LeftBar = ({ socket }) => {
   const navigation = useNavigate()
   const months = ['Jan', 'Feb', 'Mar', "Apr", 'May', "Jun", "Jul", "Aug", "Sep", 'Oct', "Nov", 'Dec']
   const { userDetails, friends, onlineArr, setCurrentTalk, setCurrentName, recentChats, setRecentChats, recentSearchedForOnline, randomImage, lastMessages, setLastMessages } = useContext(UserContext)
   const [searchedFriend,setSearchedFriend] = useState('')
+  const [selfProfileClicked,setSelfProfileClicked] = useState(false)
 
   const findRecentChats = () => {
     if (!socket) return
@@ -71,13 +73,16 @@ const LeftBar = ({ socket }) => {
       
       {/* Profile Section */}
       <div className="flex items-center gap-4 px-4 py-3 border-b border-gray-200 bg-gray-50">
-        <div className="relative w-14 h-14">
+        <div className="relative w-14 h-14 cursor-pointer" onClick={()=>{
+          setSelfProfileClicked(prev=>(!prev))
+        }}>
           <img
             src={userDetails?.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
             alt="Profile"
             className="w-full h-full object-cover rounded-full border border-gray-300"
           />
-          <Edit className='absolute bottom-[-5%] shadow-md right-[-5%] bg-white rounded-full p-1 cursor-pointer editButton'   color='info' style={{fontSize:'1.6em'}} onClick={()=>{
+          <Edit className='absolute bottom-[-5%] shadow-md right-[-5%] bg-white rounded-full p-1 cursor-pointer editButton'   color='info' style={{fontSize:'1.6em'}} onClick={(e)=>{
+            e.stopPropagation()
             localStorage.setItem('efname',userDetails?.fname)
             localStorage.setItem('elname',userDetails?.lname)
             localStorage.setItem('eabout',userDetails?.about)
@@ -85,6 +90,7 @@ const LeftBar = ({ socket }) => {
             localStorage.setItem('ephone',userDetails?.phone)
             localStorage.setItem('ePic',userDetails?.profilePic)
             navigation('/editAccount')}}/>
+            {selfProfileClicked && <EditOrLogOut/>}
         </div>
         <p className="font-medium text-gray-800 text-lg">
           {userDetails?.fname} {userDetails?.lname}
