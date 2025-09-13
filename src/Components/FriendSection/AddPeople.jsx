@@ -61,16 +61,16 @@ const AddPeople = () => {
   }, []);
 
   return (
-    <main className="h-screen w-screen flex flex-col items-center py-6 bg-gradient-to-br from-[#f4f4f4] via-[#f9fafb] to-[#e5e7eb]">
+    <main className="h-screen w-screen flex md:justify-start justify-evenly flex-col items-center py-6 bg-gradient-to-br from-[#f4f4f4] via-[#f9fafb] to-[#e5e7eb]">
       <Typography
-        variant="h4"
-        className="font-bold text-gray-800 mb-6 drop-shadow-sm"
+        variant={window.innerWidth>475?"h5":"h6"}
+        className="font-bold text-gray-800  md:p-5 p-3 drop-shadow-sm"
       >
         🌐 Connect with More People
       </Typography>
 
-      <div className="flex flex-wrap gap-6 justify-center items-center overflow-y-auto h-[80%] w-[90%] md:p-3 p-2 bg-white/70 backdrop-blur-md rounded-2xl shadow-lg relative">
-       <Typography variant="h6" className="font-bold text-gray-500 drop-shadow-sm absolute top-[7%]">
+      <div className="flex flex-wrap md:gap-6 gap-4 justify-center items-center overflow-y-auto md:h-[80%] h-[95%] md:w-[90%] w-[95%] md:p-4 p-8 bg-white backdrop-blur-md rounded-2xl shadow-lg relative">
+       <Typography variant={window.innerWidth>475?"h6":"h8"} className={`font-bold text-gray-500 drop-shadow-sm absolute ${window.innerWidth>475?"top-[7%]":"top-[2%]"}`}>
             With those that you haven't connected with 🤷‍♂️
           </Typography>
         {exeptFriends?.map((friend) => {
@@ -83,7 +83,7 @@ const AddPeople = () => {
               <div
                 key={friend._id}
                 id={friend._id}
-                className="flex flex-col items-center gap-3 w-[200px] p-5 rounded-2xl shadow-md bg-white hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                className="flex flex-col items-center gap-3 w-[200px] md:p-5 p-4 rounded-2xl shadow-md bg-white hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
                 onClick={() => {
                   setViewDetailsId(friend?._id);
                   nav('/viewProfile')
