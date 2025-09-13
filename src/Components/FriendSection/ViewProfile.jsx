@@ -18,15 +18,19 @@ const ViewProfile = () => {
     useContext(UserContext);
 
   useEffect(()=>{
-    if(userDetails){
-      localStorage.setItem('selfDetails',JSON.stringify(userDetails))
-    }
     if(friends){
       localStorage.setItem('selfFriends',JSON.stringify(friends))
     }
     if(viewDetailsId){
       localStorage.setItem('viewId',viewDetailsId)
     }
+
+    return ()=>{
+      localStorage.removeItem('selfFriends')
+      localStorage.removeItem('viewId')
+
+    }
+
   },[friends,userDetails,viewDetailsId])
 
   useEffect(()=>{
@@ -59,7 +63,7 @@ const ViewProfile = () => {
       );
       
       
-      friends.forEach((ownerfriend) => {
+      friends?.forEach((ownerfriend) => {
         const isThere = result?.profileFriendsDetails?.some(
           (friend) => ownerfriend._id === friend._id
         );
@@ -71,8 +75,9 @@ const ViewProfile = () => {
   };
 
   useEffect(() => {
+    if(userDetails && viewDetailsId)
     get_Details();
-  }, [viewDetailsId]);
+  }, [viewDetailsId,userDetails,friends]);
 
    const addFriend=async(receiverId)=>{
           setLoadingAccount(prev=>([...prev,receiverId]))
@@ -107,7 +112,7 @@ const ViewProfile = () => {
               randomImage[Math.floor(Math.random() * randomImage?.length)]
             }
             alt="Profile"
-            className="w-full h-full object-cover rounded-full border-4 border-blue-500 shadow-lg"
+            className="w-full h-full  rounded-full border-4 border-blue-500 shadow-lg"
           />
         </div>
 
@@ -155,7 +160,7 @@ const ViewProfile = () => {
 
         <div className="flex flex-wrap md:gap-6 gap-2 overflow-auto max-h-[40vh] md:p-2">
           {userFriends?.map((friend) => {
-            let isFriend = friends.some((f) => f._id === friend._id);
+            let isFriend = friends?.some((f) => f._id === friend._id);
             let isSelf = friend._id === userDetails._id;
               return (
                 <div
@@ -173,7 +178,7 @@ const ViewProfile = () => {
                       randomImage[Math.floor(Math.random() * randomImage?.length)]
                     }
                     alt="Profile"
-                    className="w-16 h-16 object-cover rounded-full border border-gray-300 shadow-md"
+                    className="w-16 h-16 rounded-full border border-gray-300 shadow-md"
                     loading="lazy"
                   />
                   <span className="font-medium text-gray-800">

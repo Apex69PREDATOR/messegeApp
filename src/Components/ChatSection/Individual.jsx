@@ -1,6 +1,6 @@
-import {useState,useContext, useEffect, useRef} from 'react'
+import {useState,useContext, useEffect, useRef,lazy} from 'react'
 import { Button,Badge} from '@mui/material'
-import { Person} from '@mui/icons-material'
+import { Person,Handshake} from '@mui/icons-material'
 import { UserContext } from '../../Context/UserProvider'
 import { useNavigate } from 'react-router-dom'
 import SearchBox from '../Utils/SearchBox'
@@ -8,11 +8,14 @@ import getRequests from '../Utils/UsefullFunctions'
 import ShowFriends from '../FriendSection/ShowFriends'
 import CurrentChat from './CurrentChat'
 import LeftBar from './LeftBar'
+
+const NoFriends = lazy(()=>import('./NoFriends'))
 const Individual = () => {
+
   const nav=useNavigate()
   const token =  localStorage.getItem('AIchatToken')
  
-  const {userDetails,setUserDetails,totalRequests,totalFriends,requests} = useContext(UserContext)
+  const {userDetails,setUserDetails,totalRequests,totalFriends,requests,friends} = useContext(UserContext)
   const socket = useRef(null)
   
   const [seeFriends,setSeeFriends] = useState(false)
@@ -65,7 +68,8 @@ const Individual = () => {
       <LeftBar socket={socket.current}/>
     <div className='md:w-[72%] w-[100%] flex relative items-center flex-col gap-2'>
     {seeFriends && <ShowFriends socket={socket.current} setSeeFriends={setSeeFriends}/>}
-    <div className='flex items-center gap-[5vw] md:w-[80%] w-[100%] p-[0.5vw]' ><Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
+    <nav className='flex items-center flex-wrap gap-[4vw] md:w-[80%] w-[100%] p-[0.5vw]' >
+      <Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
   All Friends
   <Badge
           badgeContent={requests?.length}
@@ -74,8 +78,8 @@ const Individual = () => {
           showZero={false}
           sx={{position:'absolute',top:0,left:0}}
           ></Badge>
-</Button><SearchBox/></div>
-<CurrentChat socket={socket.current} userDetails={userDetails} />
+</Button><SearchBox/> <Button sx={{padding:'8px'}} variant='outlined' onClick={()=>{nav('/addPeople')}} startIcon={<Handshake/>}>Connect with more people</Button> </nav>
+{friends?.length?<CurrentChat socket={socket.current} userDetails={userDetails} />:<NoFriends/>}
     </div>
     </section>
     

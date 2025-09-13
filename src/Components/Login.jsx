@@ -21,6 +21,7 @@ const Login = () => {
      localStorage.setItem('AIchatToken',result?.token)
       delete data.password
       setUserDetails(result.userDih)
+      localStorage.setItem('selfDetails',JSON.stringify(result.userDih))
       setCurrentTalk(null)
       nav('/')
       }
