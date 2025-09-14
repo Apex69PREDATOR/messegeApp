@@ -15,7 +15,7 @@ const SearchBox = () => {
     }
   return (
      <div className='relative'>
-     <TextField variant='standard' label='Search by name or email'  onKeyDownCapture={(e)=>{
+     <TextField variant='standard' sx={{padding:window.innerWidth>475?'':'5px'}} label='Search by name or email'  onKeyDownCapture={(e)=>{
         if(e.key==='Enter')
         search(e.target.value)
         if(e.key==='Backspace' && e.target.value.length<=1)

@@ -1,4 +1,4 @@
-import {useContext} from 'react'
+import {useContext,useState} from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@mui/material'
 import { UserContext } from '../Context/UserProvider'
@@ -6,8 +6,10 @@ import { UserContext } from '../Context/UserProvider'
 const Signup = () => {
   const { register, handleSubmit } = useForm()
    const {setUserDetails} = useContext(UserContext)
+   const [loading,setLoading]  = useState(false)
   const signIn = (data) => {
     // Handle registration logic here
+    setLoading(true)
      fetch(`${import.meta.env.VITE_SERVER_URL}/auth/signup`,{method:"POST",headers:{
       'Content-type':'application/json'
     },body:JSON.stringify(data)}).then(response=>(response.json()).then(result=>{
@@ -18,7 +20,8 @@ const Signup = () => {
       setUserDetails(data)
       }
       alert(result.message)
-    }))
+      setLoading(false)
+    })).catch(err=>setLoading(false))
   }
 
   return (
@@ -74,6 +77,7 @@ const Signup = () => {
       <Button
         type="submit"
         variant="contained"
+        disabled={loading}
         sx={{
           bgcolor: '#00FFFF',
           color: '#0d0d2b',
@@ -82,7 +86,7 @@ const Signup = () => {
           },
         }}
       >
-        Register
+        {loading?<span className='logloader'></span>:'Register'}
       </Button>
     </form>
   )

@@ -1,15 +1,17 @@
 import { useForm } from 'react-hook-form'
 import {  Button } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
+import { useContext,useState } from 'react'
 import { UserContext } from '../Context/UserProvider'
 const Login = () => {
   const nav=useNavigate()
   const {setUserDetails,setCurrentTalk} = useContext(UserContext)
   const { register, handleSubmit } = useForm()
+  const [loading,setLoading] = useState(false)
 
   const logIn = async(data) => {
     // Handle login logic here
+    setLoading(true)
      localStorage.removeItem('currentP')
      localStorage.removeItem('currentN')
      await new Promise((resolve)=>(setTimeout(resolve,500)))
@@ -25,7 +27,9 @@ const Login = () => {
       setCurrentTalk(null)
       nav('/')
       }
-    }))
+      setLoading(false)
+    })).catch(err=>setLoading(false))
+
   }
 
   return (
@@ -54,6 +58,7 @@ const Login = () => {
       <Button
         type="submit"
         variant="contained"
+        disabled={loading}
         sx={{
           bgcolor: '#00FFFF',
           color: '#0d0d2b',
@@ -62,7 +67,7 @@ const Login = () => {
           },
         }}
       >
-        Continue
+        {loading?<span className='logloader'></span>:'Continue'}
       </Button>
     </form>
   )

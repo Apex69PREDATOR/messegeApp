@@ -165,7 +165,7 @@ const CurrentChat = (props) => {
 
      <input className='bg-white p-2 md:w-[65%] w-[80%] rounded'  {...register('message',{required:true})} id="message" placeholder={fileArr.length<=0?'write a message 🗨️ or attach a file 📂':'Enter a description for the files'}/>
      <Button  endIcon={<AttachFile/>} type='button'  color='primary'  style={{padding:`${window.innerWidth>=769?'10px':'2px'}`}} onClick={()=>{fileElement.current.click()}}  />
-     <Button  startIcon={<Send/>} type='submit'  color='primary'  style={{padding:`${window.innerWidth>=769?'10px 30px':'5px 10px'}`}}  variant='outlined' disabled={wait} >{wait?'Generating...':"Send"}</Button>
+     <Button  endIcon={<Send/>} type='submit'  color='primary'  style={{padding:`${window.innerWidth>=769?'10px 30px':'10px 18px'}`}}  variant='outlined' disabled={wait} >{wait?'Sending...':"Send"}</Button>
      </div>
      <input type="file" multiple style={{display:"none"}} onChange={handleFileChange} ref={fileElement}/>
     </form>

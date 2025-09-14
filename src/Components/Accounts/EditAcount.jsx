@@ -170,10 +170,10 @@ const EditAcount = () => {
            }}/>
           </div>
           <Button type='submit' variant='contained' disabled={loading}>{loading?'Confirming...':'Confirm Changes'}</Button>
-          {alertMessage && <Alert variant='standard' className='absolute top-[10%] left-[30%]' closeText='ok' onClose={()=>{setAlertMessage(null)
+          {alertMessage && <Alert variant='standard' className={`absolute top-[12%] md:left-[30%] left-[0%]`} closeText='ok' onClose={()=>{setAlertMessage(null)
            alertColor.current=null
           }} color={alertColor.current}>{typeof alertMessage === "string" ? alertMessage : alertMessage}</Alert>}
-          {navigatingAlert && <Alert variant='standard'  className='absolute top-[22%] left-[36%]' color='info'><b>Navigating to authorize page, do not close this page</b></Alert>}
+          {navigatingAlert && <Alert variant='standard'  className='absolute top-[22%] md:left-[36%] left-[0%]' color='info'><b>Navigating to authorize page, do not close this page</b></Alert>}
         </form>
       </div>
       <input type="file" onChange={(e)=>{

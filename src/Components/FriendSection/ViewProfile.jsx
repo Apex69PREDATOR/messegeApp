@@ -46,6 +46,7 @@ const ViewProfile = () => {
   const [message, setMessage] = useState(null);
   const [color, setColor] = useState(null);
   const isFriend = useRef(false);
+  const oneTime = useRef(false)
   const token = localStorage.getItem(import.meta.env.VITE_USER_AUTH_TOKEN);
 
   const get_Details = async () => {
@@ -68,6 +69,8 @@ const ViewProfile = () => {
           (friend) => ownerfriend._id === friend._id
         );
         if (isThere) {
+          console.log('match');
+          
           setMutualFriends((prev) => prev + 1);
         }
       });
@@ -75,8 +78,10 @@ const ViewProfile = () => {
   };
 
   useEffect(() => {
-    if(userDetails && viewDetailsId)
-    get_Details();
+    if(userDetails && viewDetailsId){
+    !oneTime.current &&  get_Details();
+    oneTime.current=true
+    }
   }, [viewDetailsId,userDetails,friends]);
 
    const addFriend=async(receiverId)=>{

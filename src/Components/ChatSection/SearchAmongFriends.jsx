@@ -15,12 +15,12 @@ const SearchAmongFriends = ({str,calculateDate}) => {
                       onClick={() => {
                         setCurrentPerson(friend._id, setCurrentTalk, setCurrentName, friend?.fname)
                       }}
-                      className="flex items-center px-4 py-3 gap-4 hover:bg-gray-100 cursor-pointer transition-colors duration-200 border-b border-gray-100"
+                      className={`flex md:flex-row flex-col md:justify-center justify-evenly md:px-4 px-3 py-3 gap-4 hover:'bg-gray-100' cursor-pointer transition-colors duration-200 border-b border-gray-100 rounded shadow-md md:h-auto h-[140px] md:w-auto w-[150px] flex-shrink-0`}
                     >
                       {/* Profile Image */}
                       <div className="relative w-12 h-12 min-w-12 min-h-12">
                         <img
-                          src={friend.profilePicture || randomImage[Math.floor(Math.random() * randomImage.length)]}
+                          src={friend.profilePic || randomImage[Math.floor(Math.random() * randomImage.length)]}
                           alt="Profile"
                           className="w-full h-full object-cover rounded-full border border-gray-300"
                         />

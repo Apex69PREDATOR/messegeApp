@@ -68,8 +68,8 @@ const Individual = () => {
       <LeftBar socket={socket.current}/>
     <div className='md:w-[72%] w-[100%] flex relative items-center flex-col gap-2'>
     {seeFriends && <ShowFriends socket={socket.current} setSeeFriends={setSeeFriends}/>}
-    <nav className='flex items-center flex-wrap gap-[4vw] md:w-[80%] w-[100%] p-[0.5vw]' >
-      <Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
+    <nav className='flex items-center flex-wrap gap-[4vw] md:w-[80%] w-[100%] p-[10px]' >
+      <Button variant={seeFriends?"contained":"outlined"} sx={{position:'relative',padding:window.innerWidth>475?'':'5px',fontSize:window.innerWidth>475?'':'0.8em'}} onClick={()=>{setSeeFriends(!seeFriends)}} startIcon={<Person />} color='primary'>
   All Friends
   <Badge
           badgeContent={requests?.length}
@@ -78,7 +78,7 @@ const Individual = () => {
           showZero={false}
           sx={{position:'absolute',top:0,left:0}}
           ></Badge>
-</Button><SearchBox/> <Button sx={{padding:'8px'}} variant='outlined' onClick={()=>{nav('/addPeople')}} startIcon={<Handshake/>}>Connect with more people</Button> </nav>
+</Button><SearchBox/> <Button sx={{padding:window.innerWidth>475?'':'5px',fontSize:window.innerWidth>475?'':'0.8em'}} variant='outlined' onClick={()=>{nav('/addPeople')}}  startIcon={<Handshake/>}>Connect with more people</Button> </nav>
 {friends?.length?<CurrentChat socket={socket.current} userDetails={userDetails} />:<NoFriends/>}
     </div>
     </section>

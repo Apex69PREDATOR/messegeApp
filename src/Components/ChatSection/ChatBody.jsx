@@ -123,7 +123,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
 
   return (
     <section id='chatSection' className="md:w-[85%] w-[100%] relative md:h-[59vh] h-[65vh] overflow-auto flex flex-col gap-4 p-4 noScrollBar z-2">
-      { idate && <p className='bg-gray-200 p-1 opacity-60 rounded-md absolute top-0 sticky self-center z-10'>{idate}</p> }
+      {window.innerWidth>475 && idate && <p className='bg-gray-200 p-1 opacity-60 rounded-md absolute top-0 sticky self-center z-10'>{idate}</p> }
       {props?.allMessage?.map((msgObj,i) => {
         const isSelf = msgObj?.senderId === props.userDetails._id;
         const isSeenBySelf = msgObj?.seenBy?.includes(props.userDetails._id)

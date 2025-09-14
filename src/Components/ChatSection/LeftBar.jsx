@@ -10,7 +10,7 @@ import EditOrLogOut from '../Utils/EditOrLogOut'
 const LeftBar = ({ socket }) => {
   const navigation = useNavigate()
   const months = ['Jan', 'Feb', 'Mar', "Apr", 'May', "Jun", "Jul", "Aug", "Sep", 'Oct', "Nov", 'Dec']
-  const { userDetails, friends, onlineArr, setCurrentTalk, setCurrentName, recentChats, setRecentChats, recentSearchedForOnline, randomImage, lastMessages, setLastMessages } = useContext(UserContext)
+  const { userDetails, friends, onlineArr, setCurrentTalk, setCurrentName, recentChats, setRecentChats, recentSearchedForOnline, randomImage, lastMessages, setLastMessages,currentTalk } = useContext(UserContext)
   const [searchedFriend,setSearchedFriend] = useState('')
   const [selfProfileClicked,setSelfProfileClicked] = useState(false)
 
@@ -52,6 +52,7 @@ const LeftBar = ({ socket }) => {
     findRecentChats()
     getRecentChats()
   }, [socket])
+
 
   function calculateDate(date) {
     const checkDate = new Date(date)
@@ -125,7 +126,7 @@ const LeftBar = ({ socket }) => {
                   onClick={() => {
                     setCurrentPerson(recentFound._id, setCurrentTalk, setCurrentName, recentFound?.fname)
                   }}
-                  className="flex md:flex-row flex-col md:justify-center justify-evenly md:px-4 px-3 py-3 gap-4 hover:bg-gray-100 cursor-pointer transition-colors duration-200 border-b border-gray-100 rounded shadow-md md:h-auto  h-[160px] md:w-auto w-[150px] flex-shrink-0"
+                  className={`flex md:flex-row flex-col md:justify-center justify-evenly md:px-4 px-3 py-3 gap-4 hover:${currentTalk==recentFound._id?'':'bg-gray-100'} cursor-pointer transition-colors duration-200 border-b ${currentTalk==recentFound._id?'bg-[rgba(71,71,71,.7)]':'bg-white'} border-gray-100 rounded shadow-md md:h-auto h-[140px] md:w-auto w-[150px] flex-shrink-0`}
                 >
                   {/* Profile Image */}
                   <div className="relative w-12 h-12 min-w-12 min-h-12">
@@ -148,10 +149,10 @@ const LeftBar = ({ socket }) => {
                   {/* Chat Info */}
                   <div className="flex flex-col flex-1">
                     <div className="flex justify-between md:gap-0 gap-2 items-center">
-                      <p className="font-medium  text-gray-900" style={{fontSize:window.innerWidth>=769?'1em':'0.9em'}}>{recentFound.fname} {recentFound.lname}</p>
-                      <span className="text-xs text-gray-500">{calculateDate(lastMessage?.sendAt)}</span>
+                      <p className={`font-medium ${currentTalk==recentFound._id?'text-gray-300':'text-gray-900'}`} style={{fontSize:window.innerWidth>=769?'1em':'0.9em'}}>{recentFound.fname} {recentFound.lname}</p>
+                      <span className={`text-xs ${currentTalk==recentFound._id?'text-gray-300':'text-gray-500'}`}>{calculateDate(lastMessage?.sendAt)}</span>
                     </div>
-                    <p className="text-sm text-gray-600 truncate">
+                    <p className={`text-sm ${currentTalk==recentFound._id?'text-gray-300':'text-gray-600'} truncate`}>
                       {(lastMessage?.senderId === userDetails?._id ? 'You: ' : `${recentFound?.fname}: `) + lastMessage?.text.substring(0,20)}
                     </p>
                   </div>
