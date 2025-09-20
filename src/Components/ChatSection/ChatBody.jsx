@@ -26,7 +26,22 @@ const commonVideoFormats = [
   "ts",    // Transport Stream, often used in streaming
   "m4v"    // Apple’s variant of MP4
 ];
-
+const audioFormats = [
+  "mp3",
+  "wav",
+  "aac",
+  "flac",
+  "ogg",
+  "wma",
+  "alac",
+  "aiff",
+  "dsd",
+  "pcm",
+  "m4a",
+  "opus",
+  "amr",
+  "ape"
+];
 
 const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov','Dec']
 
@@ -173,7 +188,7 @@ const months= ['Jan','Feb','Mar','Apr','May','Jun','Jul',"Aug",'Sep','Oct','Nov'
    controls
    className='max-h-[350px] max-w-[350px]'
   />
-   : <div><p className={`text-[${isSelf?'#dedee0':'#503dfc'}] p-2 ${isSelf?'bg-[#2b75ed]':'bg-[#d7d7d9]'} mb-4`}>{lastName.length>25?lastName.substring(0,25)+'...':lastName}</p><a href={fileUrl}  download={lastName}><Button variant='contained' color='secondary' style={{fontSize:'0.8em'}}>Download to see</Button></a></div>
+   :audioFormats.includes(extension)?<audio src={fileUrl} controls></audio>: <div><p className={`text-[${isSelf?'#dedee0':'#503dfc'}] p-2 ${isSelf?'bg-[#2b75ed]':'bg-[#d7d7d9]'} mb-4`}>{lastName.length>25?lastName.substring(0,25)+'...':lastName}</p><a href={fileUrl}  download={lastName}><Button variant='contained' color='secondary' style={{fontSize:'0.8em'}}>Download to see</Button></a></div>
 
 }
                 
